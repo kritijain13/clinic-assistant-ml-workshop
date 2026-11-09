@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Sanjeevani Clinic</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <a href="/" class="brand">
+        <span class="brand-mark">+</span>
+        Sanjeevani Clinic
+    </a>
+
+    <nav>
+        <a href="/">Home</a>
+    </nav>
+</header>
+
+
+<main>
+
+    <section class="form-shell">
+
+        <div class="eyebrow-block">
+            <h1>Welcome Back</h1>
+            <p class="sub">
+                Login to continue to your Sanjeevani Clinic account.
+            </p>
+        </div>
+
+
+        <div class="card">
+
+            <form id="loginForm">
+
+                <div class="field">
+                    <label for="role">Login as</label>
+                    <select id="role" name="role" required>
+                        <option value="USER">User</option>
+                        <option value="DOCTOR">Doctor</option>
+                        <option value="SUPER_ADMIN">Super User</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="email">ID / Email</label>
+
+                    <input
+                        type="text"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your account ID or email"
+                        required
+                    >
+                </div>
+
+
+                <div class="field">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+
+                <div id="message"></div>
+
+
+                <div class="submit-row">
+                    <button type="submit">
+                        Login
+                    </button>
+                </div>
+
+            </form>
+
+
+            <p style="text-align:center; margin-top:20px;">
+                Don't have an account?
+                <a href="/register" style="color: var(--teal-700); font-weight:600;">
+                    Create Account
+                </a>
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="site-footer">
+    © 2026 Sanjeevani Clinic
+</footer>
+
+
+<script>
+
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const role = document.getElementById("role").value;
+
+    const message = document.getElementById("message");
+
+    message.innerHTML = "";
+
+    try {
+
+        const response = await fetch("/api/auth/login", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                role: role
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            message.innerHTML = `
+                <p style="color: var(--leaf-500);">
+                    ${data.message}
+                </p>
+            `;
+
+            window.location.href = data.role === "SUPER_ADMIN"
+                ? "/admin/dashboard"
+                : data.role === "DOCTOR" ? "/doctor/dashboard" : "/clinic";
+
+        } else {
+
+            message.innerHTML = `
+                <p style="color: var(--clay-500);">
+                    ${data.message}
+                </p>
+            `;
+
+        }
+
+    } catch (error) {
+
+        message.innerHTML = `
+            <p style="color: var(--clay-500);">
+                Something went wrong. Please try again.
+            </p>
+        `;
+
+        console.error(error);
+    }
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Token Usage Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #18332e;
+        }
+
+        .header {
+            background: #245c56;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            opacity: 0.85;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #245c56;
+        }
+
+        .value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .progress-container {
+            margin-top: 15px;
+            background: #e5e9e8;
+            border-radius: 20px;
+            height: 18px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #245c56;
+            transition: width 0.4s ease;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #e7f4ef;
+            color: #245c56;
+            font-weight: bold;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 11px 18px;
+            background: #245c56;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .error {
+            color: #b42318;
+            background: #fff1f0;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>Token Usage Dashboard</h1>
+
+    <p>Sanjeevani Clinic AI</p>
+
+</div>
+
+
+<div class="container">
+
+
+    <div id="errorMessage" class="error"></div>
+
+
+    <div class="dashboard-grid">
+
+
+        <div class="card">
+
+            <h3>Used Tokens</h3>
+
+            <div id="usedTokens" class="value">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Remaining Tokens</h3>
+
+            <div id="remainingTokens" class="value">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Daily Limit</h3>
+
+            <div id="dailyLimit" class="value">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Token Usage</h3>
+
+            <div id="usagePercentage" class="value">
+                0%
+            </div>
+
+            <div class="progress-container">
+
+                <div
+                    id="progressBar"
+                    class="progress-bar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Input Tokens</h3>
+
+            <div id="inputTokens" class="value">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Output Tokens</h3>
+
+            <div id="outputTokens" class="value">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Total Tokens</h3>
+
+            <div id="totalTokens" class="value">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Cost</h3>
+
+            <div id="cost" class="value">
+                0
+            </div>
+
+            <span id="status" class="status">
+                NORMAL
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <a href="/" class="back-button">
+        Back to Home
+    </a>
+
+
+</div>
+
+
+<script>
+
+    const userId = window.location.pathname.split("/").pop();
+
+
+    async function loadUsage() {
+
+        try {
+
+            const response = await fetch(
+                `/usage/${userId}`
+            );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load token usage."
+                );
+
+            }
+
+            const data = await response.json();
+
+            const usage = data.usage;
+
+
+            document.getElementById(
+                "inputTokens"
+            ).textContent =
+                usage.input_tokens;
+
+
+            document.getElementById(
+                "outputTokens"
+            ).textContent =
+                usage.output_tokens;
+
+
+            document.getElementById(
+                "totalTokens"
+            ).textContent =
+                usage.total_tokens;
+
+
+            document.getElementById(
+                "cost"
+            ).textContent =
+                usage.cost;
+
+
+            const statusResponse = await fetch(
+                `/usage-status/${userId}`
+            );
+
+
+            if (!statusResponse.ok) {
+
+                throw new Error(
+                    "Unable to load usage status."
+                );
+
+            }
+
+
+            const statusData =
+                await statusResponse.json();
+
+
+            const status =
+                statusData.usage;
+
+
+            document.getElementById(
+                "usedTokens"
+            ).textContent =
+                status.used_tokens;
+
+
+            document.getElementById(
+                "remainingTokens"
+            ).textContent =
+                status.remaining_tokens;
+
+
+            document.getElementById(
+                "dailyLimit"
+            ).textContent =
+                status.daily_limit;
+
+
+            const percentage =
+                status.usage_percentage * 100;
+
+
+            document.getElementById(
+                "usagePercentage"
+            ).textContent =
+                percentage.toFixed(2) + "%";
+
+
+            document.getElementById(
+                "progressBar"
+            ).style.width =
+                Math.min(percentage, 100) + "%";
+
+
+            document.getElementById(
+                "status"
+            ).textContent =
+                status.status;
+
+        }
+
+        catch (error) {
+
+            const errorMessage =
+                document.getElementById(
+                    "errorMessage"
+                );
+
+            errorMessage.textContent =
+                error.message;
+
+            errorMessage.style.display =
+                "block";
+
+        }
+
+    }
+
+
+    loadUsage();
+
+</script>
+
+
+</body>
+
+</html>

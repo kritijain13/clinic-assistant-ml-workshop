@@ -1,0 +1,38 @@
+
+# Environment variables and secrets
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Python virtual environments
+.venv/
+venv/
+**/.venv/
+**/venv/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs and cache
+logs/
+**/logs/
+*.log
+__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# IDE and system files
+.vscode/
+.idea/
+.DS_Store
+
+# Uploaded files
+uploads/
+# Patient payment receipts
+clinic_assistant/receipts/*.pdf
+test_prescription.txt

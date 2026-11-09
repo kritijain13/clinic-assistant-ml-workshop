@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Sanjeevani Clinic</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <a href="/" class="brand">
+        <span class="brand-mark">+</span>
+        Sanjeevani Clinic
+    </a>
+
+    <nav>
+        <a href="/">Home</a>
+    </nav>
+
+</header>
+
+
+<main>
+
+    <section class="form-shell">
+
+        <div class="eyebrow-block">
+
+            <h1>Create Your Account</h1>
+
+            <p class="sub">
+                Register to manage your clinic visits and appointments.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <form id="registerForm">
+
+                <div class="field">
+
+                    <label for="name">Full Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="email">Email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="phone">Phone</label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter your phone number"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        required
+                    >
+
+                </div>
+
+
+                <div id="message"></div>
+
+
+                <div class="submit-row">
+
+                    <button type="submit">
+                        Create Account
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <p style="text-align:center; margin-top:20px;">
+
+                Already have an account?
+
+                <a
+                    href="/login"
+                    style="color: var(--teal-700); font-weight:600;"
+                >
+                    Login
+                </a>
+
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="site-footer">
+
+    © 2026 Sanjeevani Clinic
+
+</footer>
+
+
+<script>
+
+document.getElementById("registerForm").addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("password").value;
+
+    const message = document.getElementById("message");
+
+    message.innerHTML = "";
+
+    try {
+
+        const response = await fetch("/api/auth/register", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password,
+                phone: phone
+            })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (data.success) {
+
+            message.innerHTML = `
+                <p style="color: var(--leaf-500);">
+                    ${data.message}
+                </p>
+            `;
+
+            setTimeout(function() {
+                window.location.href = "/login";
+            }, 1000);
+
+        } else {
+
+            message.innerHTML = `
+                <p style="color: var(--clay-500);">
+                    ${data.message}
+                </p>
+            `;
+
+        }
+
+    } catch (error) {
+
+        message.innerHTML = `
+            <p style="color: var(--clay-500);">
+                Something went wrong. Please try again.
+            </p>
+        `;
+
+        console.error(error);
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

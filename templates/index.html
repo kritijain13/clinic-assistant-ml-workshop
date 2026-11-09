@@ -1,0 +1,6526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sanjeevani Screening Clinic</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+    <!-- Razorpay -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+    <style>
+
+        /* =====================================================
+           CHATBOT
+        ===================================================== */
+
+        .clinic-chat-section {
+            padding: 70px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .clinic-chat-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .clinic-chat-heading h2 {
+            margin-bottom: 10px;
+        }
+
+        .clinic-chat-heading p {
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .clinic-chat-card {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        }
+
+        .clinic-chat-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .clinic-assistant-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #245c56;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .clinic-assistant-info h3 {
+            margin: 0 0 4px;
+        }
+
+        .clinic-assistant-info p {
+            margin: 0;
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        .clinic-chat-messages {
+            min-height: 350px;
+            max-height: 620px;
+            overflow-y: auto;
+            padding: 24px;
+            background: #fafafa;
+        }
+
+        .clinic-message {
+            max-width: 82%;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .clinic-user-message {
+            margin-left: auto;
+            background: #245c56;
+            color: #fff;
+        }
+
+        .clinic-assistant-message {
+            margin-right: auto;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            color: #222;
+        }
+
+
+        /* =====================================================
+           LOGIN
+        ===================================================== */
+
+        .clinic-login-box {
+            padding: 45px 25px;
+            text-align: center;
+        }
+
+        .clinic-login-box h3 {
+            margin-bottom: 10px;
+        }
+
+        .clinic-login-box p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .clinic-login-form {
+            max-width: 420px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .clinic-login-field {
+            margin-bottom: 15px;
+        }
+
+        .clinic-login-field label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .clinic-login-field input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 13px;
+            border: 1px solid #d5d5d5;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .clinic-login-field input:focus {
+            outline: none;
+            border-color: #245c56;
+        }
+
+        .clinic-login-submit {
+            width: 100%;
+            padding: 12px 18px;
+            background: #245c56;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .clinic-login-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .clinic-login-error {
+            min-height: 20px;
+            margin-top: 10px;
+            color: #b42318;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .clinic-register-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #245c56;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           CHAT INPUT
+        ===================================================== */
+
+        .clinic-chat-input-area {
+            padding: 18px;
+            border-top: 1px solid #eeeeee;
+            background: #fff;
+        }
+
+        .clinic-chat-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .clinic-chat-input {
+            flex: 1;
+            min-height: 48px;
+            max-height: 130px;
+            padding: 13px;
+            border: 1px solid #d5d5d5;
+            border-radius: 12px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .clinic-chat-input:focus {
+            outline: none;
+            border-color: #245c56;
+        }
+
+        .clinic-send-button {
+            border: none;
+            background: #245c56;
+            color: white;
+            padding: 13px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .clinic-send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .clinic-chat-status {
+            min-height: 20px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+
+        /* =====================================================
+           INJURY UPLOAD
+        ===================================================== */
+
+        .clinic-injury-upload {
+            margin-top: 15px;
+        }
+
+        .clinic-upload-label,
+        .clinic-prescription-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 14px;
+            border: 1px solid #d5d5d5;
+            border-radius: 9px;
+            background: #fafafa;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        #injuryImage,
+        #prescriptionFile {
+            display: none;
+        }
+
+        .clinic-selected-files {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .clinic-image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 15px;
+        }
+
+        .clinic-photo-card {
+            position: relative;
+            width: 145px;
+            height: 145px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            background: #f7f7f7;
+        }
+
+        .clinic-photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .clinic-remove-photo {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 50%;
+            background: #d93636;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .clinic-photo-number {
+            position: absolute;
+            left: 6px;
+            bottom: 6px;
+            padding: 3px 7px;
+            background: rgba(0,0,0,0.65);
+            color: white;
+            border-radius: 5px;
+            font-size: 11px;
+        }
+
+        .clinic-analyze-button {
+            margin-top: 14px;
+            padding: 10px 17px;
+            border: none;
+            border-radius: 8px;
+            background: #245c56;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .clinic-analyze-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+
+        /* =====================================================
+           PRESCRIPTION
+        ===================================================== */
+
+        .clinic-prescription-upload {
+            margin-top: 12px;
+        }
+
+        .clinic-prescription-status {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .clinic-prescription-card {
+            width: 100%;
+        }
+
+        .clinic-prescription-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .clinic-prescription-section {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .clinic-prescription-section-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .clinic-medicine-card {
+            margin-top: 10px;
+            padding: 12px;
+            background: #f7faf9;
+            border: 1px solid #e1ebe9;
+            border-radius: 10px;
+        }
+
+        .clinic-medicine-name {
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .clinic-medicine-row {
+            margin: 3px 0;
+        }
+
+        .clinic-prescription-success {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f3f8f7;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           VISION RESULT
+        ===================================================== */
+
+        .clinic-vision-title {
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .clinic-vision-photo-result {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #fafafa;
+            border-radius: 10px;
+            border: 1px solid #eeeeee;
+        }
+
+        .clinic-vision-label {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .clinic-care-advice {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .clinic-specialty {
+            margin-top: 14px;
+            padding: 12px;
+            background: #f3f8f7;
+            border-radius: 9px;
+        }
+
+
+        /* =====================================================
+           DOCTOR / SLOT
+        ===================================================== */
+
+        .clinic-doctor-list {
+            margin-top: 15px;
+        }
+
+        .clinic-doctor-card {
+            padding: 16px;
+            margin-top: 12px;
+            background: #fff;
+            border: 1px solid #e2e2e2;
+            border-radius: 12px;
+        }
+
+        .clinic-doctor-card h4 {
+            margin: 0 0 7px;
+        }
+
+        .clinic-doctor-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .clinic-slot-button,
+        .clinic-confirm-button {
+            margin-top: 10px;
+            padding: 9px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #245c56;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .clinic-date-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .clinic-date-button,
+        .clinic-time-button {
+            padding: 9px 13px;
+            border: 1px solid #d5d5d5;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .clinic-booking-box {
+            margin-top: 15px;
+            padding: 17px;
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+        }
+
+        .clinic-booking-reason {
+            width: 100%;
+            min-height: 80px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #d5d5d5;
+            border-radius: 8px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+
+        /* =====================================================
+           PAYMENT
+        ===================================================== */
+
+        .clinic-payment-box {
+            margin-top: 18px;
+            padding: 22px;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .clinic-payment-box h3 {
+            margin: 0 0 10px;
+        }
+
+        .clinic-payment-fee {
+            font-size: 28px;
+            font-weight: 700;
+            color: #245c56;
+            margin: 15px 0;
+        }
+
+        .clinic-payment-info {
+            color: #555;
+            line-height: 1.6;
+            margin: 6px 0;
+        }
+
+        .clinic-pay-button {
+            margin-top: 18px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 9px;
+            background: #245c56;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .clinic-pay-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .clinic-payment-success {
+            margin-top: 18px;
+            padding: 15px;
+            background: #f3f8f7;
+            border-radius: 9px;
+            line-height: 1.7;
+        }
+
+        .clinic-receipt-button {
+            margin-top: 12px;
+            padding: 10px 18px;
+            border: 1px solid #245c56;
+            border-radius: 8px;
+            background: white;
+            color: #245c56;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+
+        @media (max-width: 700px) {
+
+            .clinic-chat-section {
+                padding: 50px 15px;
+            }
+
+            .clinic-chat-input-row {
+                flex-direction: column;
+            }
+
+            .clinic-send-button {
+                width: 100%;
+            }
+
+            .clinic-message {
+                max-width: 90%;
+            }
+
+            .clinic-photo-card {
+                width: 110px;
+                height: 110px;
+            }
+
+        }
+            .appointment-list,
+            .appointment-card {
+            white-space: normal;
+        }
+
+            .appointment-card {
+                margin-bottom: 12px;
+                padding: 12px;
+            }
+
+            .appointment-card h4,
+            .appointment-card p {
+                margin: 5px 0;
+            }
+
+    
+        /* =====================================================
+           PREMIUM HOMEPAGE UI - HOME SCREEN ONLY
+        ===================================================== */
+        .home-theme-toggle {
+            border: 1px solid var(--teal-700);
+            background: transparent;
+            color: var(--teal-700);
+            border-radius: 999px;
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all .2s ease;
+        }
+        .home-theme-toggle:hover { transform: translateY(-1px); }
+
+        .home-nav {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+        .home-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+        .home-nav-links a {
+            text-decoration: none;
+            color: var(--ink-soft);
+            font-size: .92rem;
+            font-weight: 600;
+        }
+        .home-nav-links a:hover { color: var(--teal-700); }
+
+        .home-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 13px;
+            border-radius: 999px;
+            background: var(--sage-100);
+            color: var(--teal-700);
+            font-size: .78rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+        .home-hero-badge::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--leaf-500);
+        }
+        .home-secondary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            padding: 13px 18px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-weight: 600;
+            color: var(--teal-700);
+            background: var(--panel);
+        }
+        .home-secondary-btn:hover { border-color: var(--teal-700); }
+
+        .home-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 34px 48px 70px;
+        }
+        .home-section-heading { margin-bottom: 25px; }
+        .home-section-heading h2 {
+            margin: 0 0 8px;
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            color: var(--teal-900);
+        }
+        .home-section-heading p {
+            margin: 0;
+            color: var(--ink-soft);
+            line-height: 1.7;
+            max-width: 680px;
+        }
+        .home-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+        .home-feature-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 10px 28px rgba(20,56,50,.05);
+        }
+        .home-feature-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--sage-100);
+            color: var(--teal-700);
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        .home-feature-card h3 { margin: 0 0 8px; font-size: 1rem; color: var(--teal-900); }
+        .home-feature-card p { margin: 0; color: var(--ink-soft); line-height: 1.6; font-size: .88rem; }
+
+        .home-steps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+        .home-step {
+            position: relative;
+            padding: 22px 18px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+        }
+        .home-step-number {
+            display: inline-flex;
+            width: 30px;
+            height: 30px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--teal-700);
+            color: var(--paper);
+            font-weight: 700;
+            font-size: .8rem;
+            margin-bottom: 13px;
+        }
+        .home-step h3 { margin: 0 0 7px; font-size: .96rem; }
+        .home-step p { margin: 0; color: var(--ink-soft); font-size: .82rem; line-height: 1.55; }
+
+        .home-location-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .home-location-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 24px;
+        }
+        .home-location-card .city {
+            font-family: 'Fraunces', serif;
+            font-size: 1.45rem;
+            color: var(--teal-900);
+            margin-bottom: 8px;
+        }
+        .home-location-card p { margin: 6px 0; color: var(--ink-soft); font-size: .88rem; line-height: 1.55; }
+        .home-location-tag {
+            display: inline-block;
+            margin-top: 9px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--sage-100);
+            color: var(--teal-700);
+            font-size: .75rem;
+            font-weight: 700;
+        }
+
+        .home-trust {
+            max-width: 1100px;
+            margin: 0 auto 70px;
+            padding: 0 48px;
+        }
+        .home-trust-box {
+            border-radius: 22px;
+            padding: 28px 30px;
+            background: var(--teal-900);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+        }
+        .home-trust-box h2 { margin: 0 0 7px; font-family: 'Fraunces', serif; }
+        .home-trust-box p { margin: 0; opacity: .82; line-height: 1.6; }
+
+        /* Floating chatbot */
+        .chat-float-button {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 9998;
+            width: 62px;
+            height: 62px;
+            border: 0;
+            border-radius: 50%;
+            background: var(--teal-700);
+            color: #fff;
+            box-shadow: 0 14px 35px rgba(20,56,50,.28);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+        .chat-float-button:hover { transform: translateY(-2px); }
+        .chat-float-label {
+            position: fixed;
+            right: 96px;
+            bottom: 35px;
+            z-index: 9997;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            color: var(--teal-900);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: .82rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
+            pointer-events: none;
+        }
+        .clinic-chat-section {
+            display: none;
+        }
+        .clinic-chat-section.chat-popup {
+            display: block;
+            position: fixed;
+            z-index: 9999;
+            right: 24px;
+            bottom: 98px;
+            width: min(520px, calc(100vw - 30px));
+            max-height: calc(100vh - 125px);
+            overflow-y: auto;
+            padding: 0;
+            background: var(--panel);
+            border-radius: 20px;
+            box-shadow: 0 25px 70px rgba(0,0,0,.24);
+            border: 1px solid var(--line);
+        }
+        .clinic-chat-section.chat-popup .clinic-chat-heading {
+            display: none;
+        }
+        .chat-popup-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 3;
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,.9);
+            color: #24332f;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .clinic-chat-section.chat-popup .clinic-chat-card {
+            border: 0;
+            border-radius: 20px;
+            box-shadow: none;
+        }
+
+        /* Dark mode: homepage only */
+        body.dark-mode {
+            --paper: #0f1917;
+            --panel: #16231f;
+            --teal-900: #e9f4ef;
+            --teal-700: #8ec7b7;
+            --teal-500: #6cae9d;
+            --sage-200: #294039;
+            --sage-100: #20342e;
+            --ink: #e6eee9;
+            --ink-soft: #aebeb7;
+            --line: #30423c;
+        }
+        body.dark-mode .hero-panel,
+        body.dark-mode .reason-card,
+        body.dark-mode .home-feature-card,
+        body.dark-mode .home-step,
+        body.dark-mode .home-location-card { box-shadow: none; }
+        body.dark-mode .clinic-chat-messages { background: #101b18; }
+        body.dark-mode .clinic-assistant-message,
+        body.dark-mode .clinic-login-box,
+        body.dark-mode .clinic-chat-card { background: var(--panel); color: var(--ink); }
+        body.dark-mode .clinic-chat-input { background: #101b18; color: var(--ink); }
+        body.dark-mode .chat-popup-close { background: #22342f; color: #fff; }
+
+        @media (max-width: 850px) {
+            .home-nav-links { display: none; }
+            .home-feature-grid { grid-template-columns: repeat(2, 1fr); }
+            .home-steps { grid-template-columns: repeat(2, 1fr); }
+            .home-location-grid { grid-template-columns: 1fr; }
+            .home-trust-box { flex-direction: column; align-items: flex-start; }
+        }
+        @media (max-width: 600px) {
+            .site-header { padding: 18px 20px; }
+            .hero { padding: 55px 20px 35px; grid-template-columns: 1fr; }
+            .home-section { padding: 25px 20px 50px; }
+            .home-trust { padding: 0 20px; }
+            .home-feature-grid { grid-template-columns: 1fr; }
+            .home-steps { grid-template-columns: 1fr; }
+            .chat-float-label { display: none; }
+            .chat-float-button { right: 16px; bottom: 16px; }
+            .clinic-chat-section.chat-popup { right: 10px; bottom: 88px; width: calc(100vw - 20px); max-height: calc(100vh - 105px); }
+        }
+
+
+
+        /* =====================================================
+           ROLE + SUPER ADMIN DASHBOARD
+           Added without changing existing chatbot workflow.
+        ===================================================== */
+
+        .clinic-user-role-box {
+            margin: 16px 24px;
+            padding: 14px 16px;
+            background: #f7faf9;
+            border: 1px solid #e1ebe9;
+            border-radius: 14px;
+        }
+
+        .clinic-user-role-welcome {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #245c56;
+        }
+
+        .clinic-user-role-text {
+            margin: 5px 0 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .clinic-admin-dashboard-button {
+            display: none;
+            margin-top: 12px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 9px;
+            background: #245c56;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .clinic-admin-dashboard-button:hover {
+            opacity: .9;
+        }
+
+        .clinic-admin-dashboard {
+            display: none;
+            margin: 16px 24px;
+            padding: 18px;
+            background: #fff;
+            border: 1px solid #e1ebe9;
+            border-radius: 14px;
+        }
+
+        .clinic-admin-dashboard h3 {
+            margin: 0 0 15px;
+            color: #245c56;
+        }
+
+        .clinic-admin-dashboard-status {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .clinic-admin-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .clinic-admin-stat {
+            padding: 13px;
+            background: #f7faf9;
+            border: 1px solid #e1ebe9;
+            border-radius: 10px;
+        }
+
+        .clinic-admin-stat strong {
+            display: block;
+            font-size: 20px;
+            color: #245c56;
+        }
+
+        .clinic-admin-stat span {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .clinic-admin-section {
+            margin-top: 16px;
+        }
+
+        .clinic-admin-section h4 {
+            margin: 0 0 8px;
+            color: #245c56;
+        }
+
+        .clinic-admin-table-wrap {
+            overflow-x: auto;
+        }
+
+        .clinic-admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .clinic-admin-table th,
+        .clinic-admin-table td {
+            padding: 8px;
+            border: 1px solid #e5e5e5;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .clinic-admin-table th {
+            background: #f3f8f7;
+            font-weight: 700;
+        }
+
+        .clinic-admin-close-button {
+            margin-top: 14px;
+            padding: 9px 14px;
+            border: 1px solid #245c56;
+            border-radius: 8px;
+            background: #fff;
+            color: #245c56;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        body.dark-mode .clinic-user-role-box,
+        body.dark-mode .clinic-admin-dashboard {
+            background: var(--panel);
+            border-color: var(--line);
+        }
+
+        body.dark-mode .clinic-user-role-welcome,
+        body.dark-mode .clinic-admin-dashboard h3,
+        body.dark-mode .clinic-admin-section h4 {
+            color: var(--teal-700);
+        }
+
+        body.dark-mode .clinic-user-role-text,
+        body.dark-mode .clinic-admin-dashboard-status,
+        body.dark-mode .clinic-admin-stat span {
+            color: var(--ink-soft);
+        }
+
+        body.dark-mode .clinic-admin-stat {
+            background: #101b18;
+            border-color: var(--line);
+        }
+
+        body.dark-mode .clinic-admin-table th,
+        body.dark-mode .clinic-admin-table td {
+            border-color: var(--line);
+        }
+
+        body.dark-mode .clinic-admin-table th {
+            background: var(--sage-100);
+        }
+
+        @media (max-width: 600px) {
+            .clinic-user-role-box,
+            .clinic-admin-dashboard {
+                margin: 12px;
+            }
+
+            .clinic-admin-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =====================================================
+           LOCATION DOCTOR FINDER - ADDED
+           Existing clinic styles remain unchanged.
+        ===================================================== */
+        .clinic-location-finder {
+            margin: 16px 24px;
+            padding: 16px;
+            background: #f7faf9;
+            border: 1px solid #e1ebe9;
+            border-radius: 14px;
+        }
+        .clinic-location-title {
+            margin: 0 0 5px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #245c56;
+        }
+        .clinic-location-subtitle {
+            margin: 0 0 12px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        .clinic-location-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .clinic-location-button,
+        .clinic-specialist-button {
+            padding: 9px 13px;
+            border: 1px solid #d5d5d5;
+            background: #fff;
+            color: #245c56;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .clinic-location-button:hover,
+        .clinic-specialist-button:hover {
+            border-color: #245c56;
+            background: #f3f8f7;
+        }
+        .clinic-location-button.active,
+        .clinic-specialist-button.active {
+            background: #245c56;
+            color: #fff;
+            border-color: #245c56;
+        }
+        .clinic-location-status {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+            min-height: 18px;
+        }
+        .clinic-specialist-area {
+            margin-top: 14px;
+        }
+        .clinic-specialist-heading {
+            margin-bottom: 9px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #245c56;
+        }
+        .clinic-specialist-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        body.dark-mode .clinic-location-finder {
+            background: var(--panel);
+            border-color: var(--line);
+        }
+        body.dark-mode .clinic-location-title,
+        body.dark-mode .clinic-specialist-heading {
+            color: var(--teal-700);
+        }
+        body.dark-mode .clinic-location-subtitle,
+        body.dark-mode .clinic-location-status {
+            color: var(--ink-soft);
+        }
+        body.dark-mode .clinic-location-button,
+        body.dark-mode .clinic-specialist-button {
+            background: #101b18;
+            color: var(--teal-700);
+            border-color: var(--line);
+        }
+        body.dark-mode .clinic-location-button:hover,
+        body.dark-mode .clinic-specialist-button:hover {
+            background: var(--sage-100);
+            border-color: var(--teal-700);
+        }
+        body.dark-mode .clinic-location-button.active,
+        body.dark-mode .clinic-specialist-button.active {
+            background: var(--teal-700);
+            color: #0f1917;
+            border-color: var(--teal-700);
+        }
+        @media (max-width: 600px) {
+            .clinic-location-finder {
+                margin: 12px;
+                padding: 14px;
+            }
+            .clinic-location-button,
+            .clinic-specialist-button {
+                width: 100%;
+            }
+        }
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     ORIGINAL HOME SCREEN
+     UNCHANGED
+===================================================== -->
+
+<header class="site-header">
+
+    <a href="/" class="brand">
+
+        <span class="brand-mark">
+
+            <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+            >
+
+                <path
+                    d="M12 21s-7.5-4.6-9.8-9.4C.6 7.9 2.4 4.5 6 4.1c2-.2 3.6.9 6 3 2.4-2.1 4-3.2 6-3 3.6.4 5.4 3.8 3.8 7.5C19.5 16.4 12 21 12 21z"
+                    fill="#F6F3EC"
+                />
+
+            </svg>
+
+        </span>
+
+        Sanjeevani Clinic
+
+    </a>
+
+
+    <div class="home-nav">
+
+        <nav class="home-nav-links">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#locations">Locations</a>
+            <a href="#how-it-works">How it works</a>
+        </nav>
+
+        <button
+            type="button"
+            id="themeToggle"
+            class="home-theme-toggle"
+            title="Switch theme"
+            aria-label="Switch theme"
+        >
+            🌙
+        </button>
+
+        <a href="/predict" class="btn-primary" style="text-decoration:none;padding:10px 17px;">
+            Book / Screen
+        </a>
+
+        <a id="authNavButton" href="/login" class="btn-primary" style="text-decoration:none;padding:10px 17px;">Login</a>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<!-- FLOATING SANJEEVANI AI BUTTON -->
+<button type="button" id="chatFloatButton" class="chat-float-button" aria-label="Open Sanjeevani AI Assistant" title="Sanjeevani AI Assistant">💬</button>
+<div class="chat-float-label">Sanjeevani AI Assistant</div>
+
+
+<section class="hero" id="home">
+
+    <div>
+
+        <span class="home-hero-badge">Sanjeevani Clinic · Jaipur · Delhi · Mumbai</span>
+
+        <h1>
+            Your health, our priority.
+        </h1>
+
+
+        <p class="lede">
+
+            Tell us your age, temperature and a couple of
+            symptoms — our screening desk gives you an instant
+            read on your covid risk, so the doctor's time goes
+            where it's needed most.
+
+        </p>
+
+
+        <div class="cta-row">
+
+            <a
+                href="/predict"
+                class="btn-primary"
+            >
+
+                Start screening
+
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                >
+
+                    <path
+                        d="M5 12h14M13 6l6 6-6 6"
+                        stroke="#F6F3EC"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+
+            </a>
+
+
+            <a href="#services" class="home-secondary-btn">
+                Explore care services →
+            </a>
+
+            <span class="hint-text">
+                Takes under a minute
+            </span>
+
+        </div>
+
+
+        <div class="stat-row">
+
+            <div>
+
+                <div class="stat-num">
+                    4
+                </div>
+
+                <div class="stat-label">
+                    quick questions
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="stat-num">
+                    &lt;1 min
+                </div>
+
+                <div class="stat-label">
+                    to a result
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="stat-num">
+                    24×7
+                </div>
+
+                <div class="stat-label">
+                    desk open
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-panel">
+
+        <span class="badge">
+            Screening desk · Now open
+        </span>
+
+
+        <div class="vitals-card">
+
+            <div>
+
+                <div class="label">
+                    Temperature
+                </div>
+
+                <div class="value">
+                    101.2°F
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="label">
+                    Cough
+                </div>
+
+                <div class="value">
+                    Mild
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="vitals-card">
+
+            <div>
+
+                <div class="label">
+                    City
+                </div>
+
+                <div class="value">
+                    Jaipur
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="label">
+                    Age
+                </div>
+
+                <div class="value">
+                    34
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="vitals-card">
+
+            <div>
+
+                <div class="label">
+                    Screening result
+                </div>
+
+                <div class="value">
+                    Ready in seconds
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="reasons">
+
+
+    <div class="reason-card">
+
+        <h3>
+            No queue, no waiting
+        </h3>
+
+        <p>
+            Fill the form from home or the waiting room —
+            the result comes back the moment you submit it.
+        </p>
+
+    </div>
+
+
+    <div class="reason-card">
+
+        <h3>
+            Built on real intake data
+        </h3>
+
+        <p>
+            The screening model learns from patient records
+            of age, fever, cough type and city to gauge risk.
+        </p>
+
+    </div>
+
+
+    <div class="reason-card">
+
+        <h3>
+            A guide, not a diagnosis
+        </h3>
+
+        <p>
+            Treat this as a first read. A positive result still
+            means the doctor should examine you properly.
+        </p>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     HOMEPAGE SERVICES
+===================================================== -->
+<section class="home-section" id="services">
+    <div class="home-section-heading">
+        <h2>Healthcare that feels simple.</h2>
+        <p>From your first question to your appointment, Sanjeevani brings everyday clinic support into one calm, easy-to-use experience.</p>
+    </div>
+
+    <div class="home-feature-grid">
+        <div class="home-feature-card">
+            <div class="home-feature-icon">📅</div>
+            <h3>Easy appointments</h3>
+            <p>Find a suitable doctor, choose an available slot and book without unnecessary steps.</p>
+        </div>
+        <div class="home-feature-card">
+            <div class="home-feature-icon">💬</div>
+            <h3>AI clinic assistant</h3>
+            <p>Get guided support for symptoms, appointments, queue status and common clinic questions.</p>
+        </div>
+        <div class="home-feature-card">
+            <div class="home-feature-icon">🩺</div>
+            <h3>Check-in & queue</h3>
+            <p>Check in for your appointment and see your queue position without standing at the desk.</p>
+        </div>
+        <div class="home-feature-card">
+            <div class="home-feature-icon">🔒</div>
+            <h3>Patient-first privacy</h3>
+            <p>Your account-based clinic experience keeps your appointment and health information organized.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+<section class="home-section" id="how-it-works">
+    <div class="home-section-heading">
+        <h2>How Sanjeevani works</h2>
+        <p>A simple journey from your concern to the right clinic support.</p>
+    </div>
+
+    <div class="home-steps">
+        <div class="home-step"><span class="home-step-number">1</span><h3>Tell us</h3><p>Share your symptoms or healthcare need.</p></div>
+        <div class="home-step"><span class="home-step-number">2</span><h3>Choose a doctor</h3><p>Explore doctors and relevant specialties.</p></div>
+        <div class="home-step"><span class="home-step-number">3</span><h3>Book a slot</h3><p>Select an available appointment time.</p></div>
+        <div class="home-step"><span class="home-step-number">4</span><h3>Check in</h3><p>Check in and follow your queue status.</p></div>
+        <div class="home-step"><span class="home-step-number">5</span><h3>Consult</h3><p>Meet the doctor for professional care.</p></div>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     CLINIC LOCATIONS
+===================================================== -->
+<section class="home-section" id="locations">
+    <div class="home-section-heading">
+        <h2>Sanjeevani clinic network</h2>
+        <p>One familiar digital experience across our city locations.</p>
+    </div>
+
+    <div class="home-location-grid">
+        <div class="home-location-card">
+            <div class="city">Jaipur</div>
+            <p>📍 Sanjeevani Clinic, Jaipur</p>
+            <p>General medicine · Diagnostics · AI-assisted clinic support</p>
+            <p>🕘 Mon–Sun · 9:00 AM–8:00 PM</p>
+            <span class="home-location-tag">Primary clinic</span>
+        </div>
+        <div class="home-location-card">
+            <div class="city">Delhi</div>
+            <p>📍 Sanjeevani Clinic, Delhi</p>
+            <p>General medicine · Specialist consultations · Diagnostics</p>
+            <p>🕘 Mon–Sun · 9:00 AM–8:00 PM</p>
+            <span class="home-location-tag">City clinic</span>
+        </div>
+        <div class="home-location-card">
+            <div class="city">Mumbai</div>
+            <p>📍 Sanjeevani Clinic, Mumbai</p>
+            <p>General medicine · Specialist consultations · Diagnostics</p>
+            <p>🕘 Mon–Sun · 9:00 AM–8:00 PM</p>
+            <span class="home-location-tag">City clinic</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     TRUST MESSAGE
+===================================================== -->
+<section class="home-trust">
+    <div class="home-trust-box">
+        <div>
+            <h2>Care guidance, with a human doctor at the centre.</h2>
+            <p>Sanjeevani AI helps with guidance and clinic workflows. It does not replace a medical diagnosis or professional consultation.</p>
+        </div>
+        <a href="/predict" class="home-secondary-btn" style="background:#fff;color:#143832;border-color:#fff;">Start now →</a>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     SANJEEVANI CHATBOT
+===================================================== -->
+
+<section class="clinic-chat-section" id="clinicChatPopup">
+
+    <button type="button" id="chatCloseButton" class="chat-popup-close" aria-label="Close chat">×</button>
+
+    <div class="clinic-chat-heading">
+
+        <h2>
+            Sanjeevani AI Clinic Assistant
+        </h2>
+
+        <p>
+            Describe your symptoms or health concern and our
+            AI assistant can guide you toward the appropriate
+            medical care.
+        </p>
+
+    </div>
+
+
+    <div class="clinic-chat-card">
+
+
+        <!-- CHAT HEADER -->
+
+        <div class="clinic-chat-header">
+
+            <div class="clinic-assistant-logo">
+                ♥
+            </div>
+
+            <div class="clinic-assistant-info">
+
+                <h3>
+                    Sanjeevani Assistant
+                </h3>
+
+                <p>
+                    AI-powered clinic support
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div
+            id="loggedOutChat"
+            style="display:block;"
+        >
+
+            <div class="clinic-login-box">
+
+                <h3>
+                    Login to use Sanjeevani AI Assistant
+                </h3>
+
+                <p>
+                    Login first so Sanjeevani can use your
+                    previous medical history and personalize your care.
+                </p>
+
+
+                <form
+                    id="chatLoginForm"
+                    class="clinic-login-form"
+                >
+
+                    <div class="clinic-login-field">
+
+                        <label for="chatLoginEmail">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="chatLoginEmail"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="clinic-login-field">
+
+                        <label for="chatLoginPassword">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="chatLoginPassword"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        id="chatLoginButton"
+                        class="clinic-login-submit"
+                    >
+                        Login
+                    </button>
+
+
+                    <div
+                        id="chatLoginError"
+                        class="clinic-login-error"
+                    ></div>
+
+                </form>
+
+
+                <a
+                    href="/register"
+                    class="clinic-register-link"
+                >
+                    New patient? Create an account
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOGGED IN CHAT -->
+
+        <div
+            id="loggedInChat"
+            style="display:none;"
+        >
+
+            <!-- =====================================================
+                 LOGGED-IN USER ROLE
+                 Added only for role visibility.
+            ====================================================== -->
+            <div id="clinicUserRoleBox" class="clinic-user-role-box">
+                <p id="clinicUserWelcome" class="clinic-user-role-welcome">
+                    Welcome
+                </p>
+
+                <p class="clinic-user-role-text">
+                    Role: <strong id="clinicUserRole">USER</strong>
+                </p>
+
+                <button
+                    type="button"
+                    id="adminDashboardButton"
+                    class="clinic-admin-dashboard-button"
+                >
+                    🛡️ Admin Dashboard
+                </button>
+            </div>
+
+            <!-- =====================================================
+                 SUPER ADMIN DASHBOARD
+                 Hidden for USER / ADMIN / SYSTEM.
+            ====================================================== -->
+            <div id="clinicAdminDashboard" class="clinic-admin-dashboard">
+
+                <h3>🛡️ Admin Dashboard</h3>
+
+                <div
+                    id="clinicAdminDashboardStatus"
+                    class="clinic-admin-dashboard-status"
+                >
+                    Loading dashboard...
+                </div>
+
+                <div id="clinicAdminStats" class="clinic-admin-stats"></div>
+
+                <div class="clinic-admin-section">
+                    <h4>Patients</h4>
+                    <div id="clinicAdminPatients" class="clinic-admin-table-wrap"></div>
+                </div>
+
+                <div class="clinic-admin-section">
+                    <h4>Doctors</h4>
+                    <div id="clinicAdminDoctors" class="clinic-admin-table-wrap"></div>
+                </div>
+
+                <div class="clinic-admin-section">
+                    <h4>Appointments</h4>
+                    <div id="clinicAdminAppointments" class="clinic-admin-table-wrap"></div>
+                </div>
+
+                <div class="clinic-admin-section">
+                    <h4>Token Usage</h4>
+                    <div id="clinicAdminTokenUsage" class="clinic-admin-table-wrap"></div>
+                </div>
+
+                <button
+                    type="button"
+                    id="adminDashboardCloseButton"
+                    class="clinic-admin-close-button"
+                >
+                    Close Dashboard
+                </button>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 LOCATION-BASED DOCTOR FINDER
+                 ADDED ONLY FOR LOCATION FILTERING
+            ====================================================== -->
+            <div id="clinicLocationFinder" class="clinic-location-finder">
+                <h3 class="clinic-location-title">
+                    📍 Choose your clinic location
+                </h3>
+                <p class="clinic-location-subtitle">
+                    Select a city first, then choose a specialist to see doctors available at that location.
+                </p>
+
+                <div class="clinic-location-buttons">
+                    <button type="button" class="clinic-location-button" data-location="Jaipur">
+                        Jaipur
+                    </button>
+                    <button type="button" class="clinic-location-button" data-location="Delhi">
+                        Delhi
+                    </button>
+                    <button type="button" class="clinic-location-button" data-location="Mumbai">
+                        Mumbai
+                    </button>
+                </div>
+
+                <div id="clinicLocationStatus" class="clinic-location-status"></div>
+
+                <div id="clinicSpecialistArea" class="clinic-specialist-area" style="display:none;">
+                    <div class="clinic-specialist-heading">
+                        Choose specialist
+                    </div>
+                    <div id="clinicSpecialistButtons" class="clinic-specialist-buttons"></div>
+                </div>
+            </div>
+
+            <div
+                id="chatMessages"
+                class="clinic-chat-messages"
+            ></div>
+
+
+            <div class="clinic-chat-input-area">
+
+
+                <!-- CHAT INPUT -->
+
+                <div class="clinic-chat-input-row">
+
+                    <textarea
+                        id="chatInput"
+                        class="clinic-chat-input"
+                        rows="2"
+                        placeholder="Describe your symptoms or health concern..."
+                    ></textarea>
+
+
+                    <button
+                        type="button"
+                        id="sendButton"
+                        class="clinic-send-button"
+                    >
+                        Send
+                    </button>
+
+                </div>
+
+
+                <!-- INJURY UPLOAD -->
+
+                <div class="clinic-injury-upload">
+
+                    <label
+                        for="injuryImage"
+                        class="clinic-upload-label"
+                    >
+                        📷 Upload Injury Photos
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="injuryImage"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                    >
+
+
+                    <div
+                        id="selectedFile"
+                        class="clinic-selected-files"
+                    ></div>
+
+
+                    <div
+                        id="imagePreview"
+                        class="clinic-image-preview"
+                    ></div>
+
+                </div>
+
+
+                <!-- PRESCRIPTION UPLOAD -->
+
+                <div class="clinic-prescription-upload">
+
+                    <label
+                        for="prescriptionFile"
+                        class="clinic-prescription-label"
+                    >
+                        📄 Upload Prescription
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="prescriptionFile"
+                        accept="image/jpeg,image/png,image/webp"
+                    >
+
+
+                    <div
+                        id="prescriptionStatus"
+                        class="clinic-prescription-status"
+                    ></div>
+
+                </div>
+
+
+                <div
+                    id="chatStatus"
+                    class="clinic-chat-status"
+                ></div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<footer class="site-footer">
+
+    Sanjeevani Screening Clinic —
+    this tool assists triage, it does not replace medical diagnosis.
+
+</footer>
+
+
+
+<script>
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const chatInput =
+    document.getElementById("chatInput");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const chatMessages =
+    document.getElementById("chatMessages");
+
+const chatStatus =
+    document.getElementById("chatStatus");
+
+
+const injuryImage =
+    document.getElementById("injuryImage");
+
+const selectedFile =
+    document.getElementById("selectedFile");
+
+const imagePreview =
+    document.getElementById("imagePreview");
+
+
+const prescriptionFile =
+    document.getElementById("prescriptionFile");
+
+const prescriptionStatus =
+    document.getElementById("prescriptionStatus");
+
+
+const chatLoginForm =
+    document.getElementById("chatLoginForm");
+
+const chatLoginEmail =
+    document.getElementById("chatLoginEmail");
+
+const chatLoginPassword =
+    document.getElementById("chatLoginPassword");
+
+const chatLoginButton =
+    document.getElementById("chatLoginButton");
+
+const chatLoginError =
+    document.getElementById("chatLoginError");
+
+const loggedInChat =
+    document.getElementById("loggedInChat");
+
+const loggedOutChat =
+    document.getElementById("loggedOutChat");
+
+const clinicUserWelcome =
+    document.getElementById("clinicUserWelcome");
+
+const clinicUserRole =
+    document.getElementById("clinicUserRole");
+
+const adminDashboardButton =
+    document.getElementById("adminDashboardButton");
+
+const clinicAdminDashboard =
+    document.getElementById("clinicAdminDashboard");
+
+const clinicAdminDashboardStatus =
+    document.getElementById("clinicAdminDashboardStatus");
+
+const clinicAdminStats =
+    document.getElementById("clinicAdminStats");
+
+const clinicAdminPatients =
+    document.getElementById("clinicAdminPatients");
+
+const clinicAdminDoctors =
+    document.getElementById("clinicAdminDoctors");
+
+const clinicAdminAppointments =
+    document.getElementById("clinicAdminAppointments");
+
+const clinicAdminTokenUsage =
+    document.getElementById("clinicAdminTokenUsage");
+
+const adminDashboardCloseButton =
+    document.getElementById("adminDashboardCloseButton");
+
+let currentUserRole = "USER";
+
+let selectedInjuryFiles = [];
+
+let injuryUploadInProgress = false;
+
+
+
+/* =========================================================
+   ROLE + ADMIN DASHBOARD
+========================================================= */
+
+function setLoggedInRole(name, role) {
+
+    currentUserRole = role || "USER";
+
+    if (clinicUserWelcome) {
+        clinicUserWelcome.textContent =
+            `Welcome, ${name || "Patient"} 👋`;
+    }
+
+    if (clinicUserRole) {
+        clinicUserRole.textContent =
+            currentUserRole;
+    }
+
+    /*
+       ADMIN and SUPER_ADMIN can see the admin area.
+       USER and SYSTEM do not see it.
+       SYSTEM is a background/service role, not a human login role.
+    */
+    if (adminDashboardButton) {
+        adminDashboardButton.style.display =
+            (currentUserRole === "ADMIN" || currentUserRole === "SUPER_ADMIN")
+                ? "inline-block"
+                : "none";
+
+        adminDashboardButton.textContent =
+            currentUserRole === "SUPER_ADMIN"
+                ? "🛡️ Super Admin Dashboard"
+                : "🛡️ Admin Panel";
+    }
+
+    if (clinicAdminDashboard) {
+        clinicAdminDashboard.style.display = "none";
+    }
+}
+
+
+function createAdminTable(columns, rows) {
+
+    if (!Array.isArray(rows) || rows.length === 0) {
+        return "<p>No data available.</p>";
+    }
+
+    let html = `
+        <table class="clinic-admin-table">
+            <thead>
+                <tr>
+    `;
+
+    columns.forEach(function(column) {
+        html += `<th>${column.label}</th>`;
+    });
+
+    html += `
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    rows.forEach(function(row) {
+
+        html += "<tr>";
+
+        columns.forEach(function(column) {
+
+            let value = row[column.key];
+
+            if (value === null || value === undefined) {
+                value = "-";
+            }
+
+            html += `<td>${String(value)}</td>`;
+        });
+
+        html += "</tr>";
+    });
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+    return html;
+}
+
+
+async function loadAdminDashboard() {
+
+    if (currentUserRole !== "ADMIN" && currentUserRole !== "SUPER_ADMIN") {
+        return;
+    }
+
+    if (!clinicAdminDashboard) {
+        return;
+    }
+
+    clinicAdminDashboard.style.display = "block";
+
+    if (clinicAdminDashboardStatus) {
+        clinicAdminDashboardStatus.textContent =
+            "Loading dashboard...";
+    }
+
+    try {
+
+        const response =
+            await fetch("/api/admin/dashboard");
+
+        const data =
+            await response.json();
+
+        if (!response.ok || !data.success) {
+
+            if (clinicAdminDashboardStatus) {
+                clinicAdminDashboardStatus.textContent =
+                    data.message || "Unable to load admin dashboard.";
+            }
+
+            return;
+        }
+
+        const patients =
+            Array.isArray(data.patients)
+                ? data.patients
+                : [];
+
+        const doctors =
+            Array.isArray(data.doctors)
+                ? data.doctors
+                : [];
+
+        const appointments =
+            Array.isArray(data.appointments)
+                ? data.appointments
+                : [];
+
+        const tokenUsage =
+            Array.isArray(data.token_usage)
+                ? data.token_usage
+                : [];
+
+        if (clinicAdminDashboardStatus) {
+            clinicAdminDashboardStatus.textContent =
+                "Dashboard loaded successfully.";
+        }
+
+        if (clinicAdminStats) {
+            clinicAdminStats.innerHTML = `
+                <div class="clinic-admin-stat">
+                    <strong>${patients.length}</strong>
+                    <span>Total Patients</span>
+                </div>
+
+                <div class="clinic-admin-stat">
+                    <strong>${doctors.length}</strong>
+                    <span>Total Doctors</span>
+                </div>
+
+                <div class="clinic-admin-stat">
+                    <strong>${appointments.length}</strong>
+                    <span>Total Appointments</span>
+                </div>
+
+                <div class="clinic-admin-stat">
+                    <strong>${tokenUsage.length}</strong>
+                    <span>Users With Token Usage</span>
+                </div>
+            `;
+        }
+
+        if (clinicAdminPatients) {
+
+            clinicAdminPatients.innerHTML =
+                createAdminTable(
+                    [
+                        {key: "id", label: "ID"},
+                        {key: "name", label: "Name"},
+                        {key: "email", label: "Email"},
+                        {key: "phone", label: "Phone"},
+                        {key: "role", label: "Role"}
+                    ],
+                    patients
+                );
+        }
+
+        if (clinicAdminDoctors) {
+
+            clinicAdminDoctors.innerHTML =
+                createAdminTable(
+                    [
+                        {key: "id", label: "ID"},
+                        {key: "name", label: "Name"},
+                        {key: "specialization", label: "Specialization"}
+                    ],
+                    doctors
+                );
+        }
+
+        if (clinicAdminAppointments) {
+
+            clinicAdminAppointments.innerHTML =
+                createAdminTable(
+                    [
+                        {key: "id", label: "Appointment ID"},
+                        {key: "patient_id", label: "Patient ID"},
+                        {key: "doctor_id", label: "Doctor ID"},
+                        {key: "appointment_date", label: "Date"},
+                        {key: "appointment_time", label: "Time"},
+                        {key: "status", label: "Status"}
+                    ],
+                    appointments
+                );
+        }
+
+        if (clinicAdminTokenUsage) {
+
+            clinicAdminTokenUsage.innerHTML =
+                createAdminTable(
+                    [
+                        {key: "user_id", label: "User ID"},
+                        {key: "date", label: "Date"},
+                        {key: "input_tokens", label: "Input"},
+                        {key: "output_tokens", label: "Output"},
+                        {key: "total_tokens", label: "Total"},
+                        {key: "cost", label: "Cost"}
+                    ],
+                    tokenUsage
+                );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Admin dashboard error:",
+            error
+        );
+
+        if (clinicAdminDashboardStatus) {
+            clinicAdminDashboardStatus.textContent =
+                "Unable to load admin dashboard.";
+        }
+    }
+}
+
+
+function closeAdminDashboard() {
+
+    if (clinicAdminDashboard) {
+        clinicAdminDashboard.style.display = "none";
+    }
+}
+
+
+/* =========================================================
+   LOGIN SCREEN
+========================================================= */
+
+function checkLoginStatus() {
+    fetch("/api/auth/session")
+        .then(response => response.json())
+        .then(session => {
+            window.chatbotLoginRequired = !session.authenticated;
+            const authButton = document.getElementById("authNavButton");
+            if (authButton) {
+                authButton.href = session.authenticated ? "/logout" : "/login";
+                authButton.textContent = session.authenticated ? "Logout" : "Login";
+            }
+            if (session.authenticated) {
+                setLoggedInRole(session.name, session.role);
+                loggedInChat.style.display = "block";
+                loggedOutChat.style.display = "none";
+            } else {
+                loggedInChat.style.display = "none";
+                loggedOutChat.style.display = "block";
+            }
+        })
+        .catch(() => {
+            window.chatbotLoginRequired = true;
+            loggedInChat.style.display = "none";
+            loggedOutChat.style.display = "block";
+        });
+
+}
+
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function loginFromChatbot(event) {
+
+    event.preventDefault();
+
+    const email =
+        chatLoginEmail.value.trim();
+
+    const password =
+        chatLoginPassword.value;
+
+    chatLoginError.textContent =
+        "";
+
+    if (!email || !password) {
+
+        chatLoginError.textContent =
+            "Please enter your email and password.";
+
+        return;
+
+    }
+
+    chatLoginButton.disabled =
+        true;
+
+    chatLoginButton.textContent =
+        "Logging in...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/auth/login",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            chatLoginError.textContent =
+                data.message ||
+                "Invalid email or password.";
+
+            return;
+
+        }
+
+
+        setLoggedInRole(
+            data.name,
+            data.role
+        );
+
+        loggedOutChat.style.display =
+            "none";
+
+        loggedInChat.style.display =
+            "block";
+
+        chatLoginForm.reset();
+
+        await loadPatientHistory();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Login error:",
+            error
+        );
+
+        chatLoginError.textContent =
+            "Unable to login right now. Please try again.";
+
+    }
+
+    finally {
+
+        chatLoginButton.disabled =
+            false;
+
+        chatLoginButton.textContent =
+            "Login";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+async function loadPatientHistory() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/history"
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            addMessage(
+                "Hello! 👋 How can I help you today?",
+                "assistant"
+            );
+
+            return;
+
+        }
+
+
+        chatMessages.innerHTML =
+            "";
+
+
+        if (!data.has_history) {
+
+            addMessage(
+                "Hello! 👋 How can I help you today?",
+                "assistant"
+            );
+
+            return;
+
+        }
+
+
+        addMessage(
+            `Welcome back, ${data.patient_name} 👋`,
+            "assistant"
+        );
+
+
+        if (
+            data.history &&
+            data.history.doctor_name
+        ) {
+
+            let message =
+                `Your previous visit was with ${data.history.doctor_name}`;
+
+            if (
+                data.history.specialization
+            ) {
+
+                message +=
+                    ` (${data.history.specialization})`;
+
+            }
+
+            message += ".";
+
+            addMessage(
+                message,
+                "assistant"
+            );
+
+        }
+
+
+        if (
+            data.history &&
+            data.history.problem
+        ) {
+
+            addMessage(
+                `Your previous concern was: ${data.history.problem}.`,
+                "assistant"
+            );
+
+        }
+
+
+        addMessage(
+            "How can I help you today?",
+            "assistant"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "History error:",
+            error
+        );
+
+        addMessage(
+            "Hello! 👋 How can I help you today?",
+            "assistant"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   NORMAL TEXT MESSAGE
+========================================================= */
+
+function addMessage(
+    message,
+    sender
+) {
+
+    const messageDiv =
+        document.createElement("div");
+
+    messageDiv.className =
+        "clinic-message " +
+        (
+            sender === "user"
+                ? "clinic-user-message"
+                : "clinic-assistant-message"
+        );
+
+
+    messageDiv.textContent =
+        message;
+
+
+    chatMessages.appendChild(
+        messageDiv
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+
+/* =========================================================
+   PRESCRIPTION MESSAGE
+   SAFE DOM VERSION
+========================================================= */
+
+function addPrescriptionMessage(
+    details,
+    data
+) {
+
+    const messageDiv =
+        document.createElement("div");
+
+
+    messageDiv.className =
+        "clinic-message clinic-assistant-message";
+
+
+    const card =
+        document.createElement("div");
+
+
+    card.className =
+        "clinic-prescription-card";
+
+
+    /* =====================================================
+       TITLE
+    ===================================================== */
+
+    const title =
+        document.createElement("div");
+
+
+    title.className =
+        "clinic-prescription-title";
+
+
+    title.textContent =
+        "📄 Prescription Analysis";
+
+
+    card.appendChild(
+        title
+    );
+
+
+    /* =====================================================
+       BASIC DETAILS
+    ===================================================== */
+
+    if (
+        details.doctor_name ||
+        details.patient_name ||
+        details.prescription_date
+    ) {
+
+        const basicSection =
+            document.createElement("div");
+
+
+        basicSection.className =
+            "clinic-prescription-section";
+
+
+        const basicTitle =
+            document.createElement("div");
+
+
+        basicTitle.className =
+            "clinic-prescription-section-title";
+
+
+        basicTitle.textContent =
+            "Prescription Details";
+
+
+        basicSection.appendChild(
+            basicTitle
+        );
+
+
+        if (
+            details.doctor_name
+        ) {
+
+            const doctor =
+                document.createElement("div");
+
+            doctor.textContent =
+                `👨‍⚕️ Doctor: ${details.doctor_name}`;
+
+            basicSection.appendChild(
+                doctor
+            );
+
+        }
+
+
+        if (
+            details.patient_name
+        ) {
+
+            const patient =
+                document.createElement("div");
+
+            patient.textContent =
+                `👤 Patient: ${details.patient_name}`;
+
+            basicSection.appendChild(
+                patient
+            );
+
+        }
+
+
+        if (
+            details.prescription_date
+        ) {
+
+            const date =
+                document.createElement("div");
+
+            date.textContent =
+                `📅 Date: ${details.prescription_date}`;
+
+            basicSection.appendChild(
+                date
+            );
+
+        }
+
+
+        card.appendChild(
+            basicSection
+        );
+
+    }
+
+
+    /* =====================================================
+       DIAGNOSIS
+    ===================================================== */
+
+    if (
+        details.diagnosis
+    ) {
+
+        const diagnosisSection =
+            document.createElement("div");
+
+
+        diagnosisSection.className =
+            "clinic-prescription-section";
+
+
+        const diagnosisTitle =
+            document.createElement("div");
+
+
+        diagnosisTitle.className =
+            "clinic-prescription-section-title";
+
+
+        diagnosisTitle.textContent =
+            "🩺 Diagnosis";
+
+
+        const diagnosisText =
+            document.createElement("div");
+
+
+        diagnosisText.textContent =
+            details.diagnosis;
+
+
+        diagnosisSection.appendChild(
+            diagnosisTitle
+        );
+
+
+        diagnosisSection.appendChild(
+            diagnosisText
+        );
+
+
+        card.appendChild(
+            diagnosisSection
+        );
+
+    }
+
+
+    /* =====================================================
+       MEDICINES
+    ===================================================== */
+
+    const medicines =
+        Array.isArray(details.medicines)
+            ? details.medicines
+            : [];
+
+
+    const medicineSection =
+        document.createElement("div");
+
+
+    medicineSection.className =
+        "clinic-prescription-section";
+
+
+    const medicineTitle =
+        document.createElement("div");
+
+
+    medicineTitle.className =
+        "clinic-prescription-section-title";
+
+
+    medicineTitle.textContent =
+        "💊 Medicines";
+
+
+    medicineSection.appendChild(
+        medicineTitle
+    );
+
+
+    if (
+        medicines.length > 0
+    ) {
+
+        medicines.forEach(
+            function(
+                medicine,
+                index
+            ) {
+
+                const medicineCard =
+                    document.createElement("div");
+
+
+                medicineCard.className =
+                    "clinic-medicine-card";
+
+
+                const medicineName =
+                    document.createElement("div");
+
+
+                medicineName.className =
+                    "clinic-medicine-name";
+
+
+                medicineName.textContent =
+                    `${index + 1}. ${medicine.name || "Medicine"}`;
+
+
+                medicineCard.appendChild(
+                    medicineName
+                );
+
+
+                if (
+                    medicine.strength
+                ) {
+
+                    const row =
+                        document.createElement("div");
+
+                    row.className =
+                        "clinic-medicine-row";
+
+                    row.textContent =
+                        `Strength: ${medicine.strength}`;
+
+                    medicineCard.appendChild(
+                        row
+                    );
+
+                }
+
+
+                if (
+                    medicine.dosage
+                ) {
+
+                    const row =
+                        document.createElement("div");
+
+                    row.className =
+                        "clinic-medicine-row";
+
+                    row.textContent =
+                        `Dosage: ${medicine.dosage}`;
+
+                    medicineCard.appendChild(
+                        row
+                    );
+
+                }
+
+
+                if (
+                    medicine.frequency
+                ) {
+
+                    const row =
+                        document.createElement("div");
+
+                    row.className =
+                        "clinic-medicine-row";
+
+                    row.textContent =
+                        `Frequency: ${medicine.frequency}`;
+
+                    medicineCard.appendChild(
+                        row
+                    );
+
+                }
+
+
+                if (
+                    medicine.duration
+                ) {
+
+                    const row =
+                        document.createElement("div");
+
+                    row.className =
+                        "clinic-medicine-row";
+
+                    row.textContent =
+                        `Duration: ${medicine.duration}`;
+
+                    medicineCard.appendChild(
+                        row
+                    );
+
+                }
+
+
+                if (
+                    medicine.timing
+                ) {
+
+                    const row =
+                        document.createElement("div");
+
+                    row.className =
+                        "clinic-medicine-row";
+
+                    row.textContent =
+                        `Timing: ${medicine.timing}`;
+
+                    medicineCard.appendChild(
+                        row
+                    );
+
+                }
+
+
+                if (
+                    medicine.instructions
+                ) {
+
+                    const row =
+                        document.createElement("div");
+
+                    row.className =
+                        "clinic-medicine-row";
+
+                    row.textContent =
+                        `Instructions: ${medicine.instructions}`;
+
+                    medicineCard.appendChild(
+                        row
+                    );
+
+                }
+
+
+                medicineSection.appendChild(
+                    medicineCard
+                );
+
+            }
+        );
+
+    }
+
+    else {
+
+        const noMedicine =
+            document.createElement("div");
+
+
+        noMedicine.textContent =
+            "No medicine details could be clearly read from the prescription.";
+
+
+        medicineSection.appendChild(
+            noMedicine
+        );
+
+    }
+
+
+    card.appendChild(
+        medicineSection
+    );
+
+
+    /* =====================================================
+       INSTRUCTIONS
+    ===================================================== */
+
+    if (
+        details.instructions
+    ) {
+
+        const instructionSection =
+            document.createElement("div");
+
+
+        instructionSection.className =
+            "clinic-prescription-section";
+
+
+        const instructionTitle =
+            document.createElement("div");
+
+
+        instructionTitle.className =
+            "clinic-prescription-section-title";
+
+
+        instructionTitle.textContent =
+            "📌 Doctor's Instructions";
+
+
+        const instructionText =
+            document.createElement("div");
+
+
+        instructionText.textContent =
+            details.instructions;
+
+
+        instructionSection.appendChild(
+            instructionTitle
+        );
+
+
+        instructionSection.appendChild(
+            instructionText
+        );
+
+
+        card.appendChild(
+            instructionSection
+        );
+
+    }
+
+
+    /* =====================================================
+       FOLLOW UP
+    ===================================================== */
+
+    if (
+        details.follow_up
+    ) {
+
+        const followUpSection =
+            document.createElement("div");
+
+
+        followUpSection.className =
+            "clinic-prescription-section";
+
+
+        const followUpTitle =
+            document.createElement("div");
+
+
+        followUpTitle.className =
+            "clinic-prescription-section-title";
+
+
+        followUpTitle.textContent =
+            "🔄 Follow-up";
+
+
+        const followUpText =
+            document.createElement("div");
+
+
+        followUpText.textContent =
+            details.follow_up;
+
+
+        followUpSection.appendChild(
+            followUpTitle
+        );
+
+
+        followUpSection.appendChild(
+            followUpText
+        );
+
+
+        card.appendChild(
+            followUpSection
+        );
+
+    }
+
+
+    /* =====================================================
+       DATABASE SUCCESS
+    ===================================================== */
+
+    const successBox =
+        document.createElement("div");
+
+
+    successBox.className =
+        "clinic-prescription-success";
+
+
+    let successText =
+        "✅ Prescription analyzed and saved to your medical records.";
+
+
+    if (
+        data.prescription_id
+    ) {
+
+        successText +=
+            ` Prescription ID: ${data.prescription_id}`;
+
+    }
+
+
+    successBox.textContent =
+        successText;
+
+
+    card.appendChild(
+        successBox
+    );
+
+
+    messageDiv.appendChild(
+        card
+    );
+
+
+    chatMessages.appendChild(
+        messageDiv
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+async function sendMessage() {
+
+    const message =
+        chatInput.value.trim();
+
+
+    if (!message) {
+        return;
+    }
+
+
+    // =====================================================
+    // MY APPOINTMENTS
+    // =====================================================
+
+    const appointmentRequest =
+        message.toLowerCase().includes("my appointment") ||
+        message.toLowerCase().includes("my appointments") ||
+        message.toLowerCase().includes("appointment details") ||
+        message.toLowerCase().includes("show appointment") ||
+        message.toLowerCase().includes("show appointments");
+
+
+    if (appointmentRequest) {
+
+        addMessage(
+            message,
+            "user"
+        );
+
+        chatInput.value = "";
+
+        await showMyAppointments();
+
+        return;
+    }
+
+
+    // =====================================================
+    // QUEUE STATUS
+    // =====================================================
+
+    // =====================================================
+// QUEUE STATUS
+// =====================================================
+
+const queueRequest =
+    message.toLowerCase().includes("queue") ||
+    message.toLowerCase().includes("queue status") ||
+    message.toLowerCase().includes("check queue") ||
+    message.toLowerCase().includes("my queue");
+
+if (queueRequest) {
+
+    addMessage(
+        message,
+        "user"
+    );
+
+    chatInput.value = "";
+
+    try {
+
+        const appointmentId =
+            prompt(
+                "Please enter your appointment ID:"
+            );
+
+        if (!appointmentId) {
+
+            return;
+        }
+
+        const queueResponse =
+            await fetch(
+                `/api/appointments/queue?appointment_id=${appointmentId}`,
+                {
+                    method: "GET"
+                }
+            );
+
+        const queueData =
+            await queueResponse.json();
+
+        if (!queueData.success) {
+
+            addMessage(
+                queueData.message ||
+                "Unable to retrieve queue status.",
+                "assistant"
+            );
+
+            return;
+        }
+
+        addMessage(
+            `🎫 Your Token: ${queueData.your_token}
+👥 Patients Ahead: ${queueData.patients_ahead}
+🔔 Current Token: ${queueData.current_token}
+⏱️ Estimated Wait: ${queueData.estimated_wait_time} minutes
+📌 Status: ${queueData.status}`,
+            "assistant"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Queue error:",
+            error
+        );
+
+        addMessage(
+            "Unable to retrieve your queue status.",
+            "assistant"
+        );
+    }
+
+    return;
+}
+
+    // =====================================================
+    // NORMAL CHAT
+    // =====================================================
+
+    addMessage(
+        message,
+        "user"
+    );
+
+
+    chatInput.value =
+        "";
+
+
+    chatStatus.textContent =
+        "Sanjeevani is thinking...";
+
+
+    sendButton.disabled =
+        true;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/chat",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        message: message
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            addMessage(
+                data.message ||
+                "Something went wrong.",
+                "assistant"
+            );
+
+            return;
+        }
+
+
+        addMessage(
+            data.response,
+            "assistant"
+        );
+
+
+        if (
+            data.needs_doctor &&
+            data.specialization
+        ) {
+
+            if (
+                data.doctors &&
+                data.doctors.length > 0
+            ) {
+
+                displayDoctors(
+                    data.doctors,
+                    data.specialization
+                );
+
+            }
+        }
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Chat error:",
+            error
+        );
+
+
+        addMessage(
+            "Something went wrong while processing your message.",
+            "assistant"
+        );
+
+    }
+
+
+    finally {
+
+        chatStatus.textContent =
+            "";
+
+
+        sendButton.disabled =
+            false;
+
+
+        chatInput.focus();
+
+    }
+
+}
+async function showMyAppointments() {
+
+    const response = await fetch(
+        "/api/appointments/my",
+        {
+            method: "GET"
+        }
+    );
+
+    const data = await response.json();
+
+    if (!data.success) {
+
+        addMessage(
+            data.message ||
+            "Unable to fetch your appointments.",
+            "assistant"
+        );
+
+        return;
+    }
+
+    if (!data.appointments ||
+        data.appointments.length === 0) {
+
+        addMessage(
+            "You don't have any appointments.",
+            "assistant"
+        );
+
+        return;
+    }
+
+    let appointmentHTML = `
+        <div class="appointment-list">
+            <h3>📅 My Appointments</h3>
+    `;
+
+    data.appointments.forEach(
+        function(appointment) {
+
+            appointmentHTML += `
+                <div class="appointment-card">
+
+                    <h4>
+                        👨‍⚕️ ${appointment.doctor_name}
+                    </h4>
+
+                    <p>
+                        🆔 <strong>Appointment ID:</strong>
+                        ${appointment.appointment_id}
+                    </p>
+
+                    <p>
+                        <strong>Specialization:</strong>
+                        ${appointment.specialization}
+                    </p>
+
+                    <p>
+                        📅 <strong>Date:</strong>
+                        ${appointment.date}
+                    </p>
+
+                    <p>
+                        ⏰ <strong>Time:</strong>
+                        ${appointment.time}
+                    </p>
+
+                    <p>
+                        📝 <strong>Reason:</strong>
+                        ${appointment.reason || "Not provided"}
+                    </p>
+
+                    <p>
+                        📌 <strong>Status:</strong>
+                        ${appointment.status}
+                    </p>
+                    ${
+                        appointment.status === "booked"
+                        ? `
+                            <div class="appointment-actions">
+
+                                <button
+                                    onclick="cancelAppointment(${appointment.appointment_id})"
+                                >
+                                    Cancel Appointment
+                                </button>
+
+                            </div>
+                        `
+                        : ""
+                    }
+
+                </div>
+            `;
+        }
+    );
+
+    appointmentHTML += `
+        </div>
+    `;
+
+    const messageDiv =
+        document.createElement("div");
+
+    messageDiv.className =
+        "clinic-message clinic-assistant-message";
+
+    messageDiv.innerHTML =
+        appointmentHTML;
+
+    chatMessages.appendChild(messageDiv);
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+}
+async function cancelAppointment(appointmentId) {
+
+    try {
+
+        // STEP 1: Refund details check karo
+        const refundResponse = await fetch(
+            `/api/appointments/refund?appointment_id=${appointmentId}`,
+            {
+                method: "GET"
+            }
+        );
+
+        const refundData = await refundResponse.json();
+
+        if (!refundResponse.ok || !refundData.success) {
+
+            alert(
+                refundData.message ||
+                "Unable to calculate refund."
+            );
+
+            return;
+        }
+
+
+        // STEP 2: Refund details user ko dikhao
+        const originalAmount = Number(
+            refundData.original_amount || 0
+        );
+
+        const deduction = Number(
+            refundData.deduction_percentage || 0
+        );
+
+        const deductionAmount = Number(
+            refundData.deduction_amount || 0
+        );
+
+        const refundAmount = Number(
+            refundData.refund_amount || 0
+        );
+
+        const hours = Number(
+            refundData.hours_before_appointment || 0
+        );
+
+
+        const confirmCancel = confirm(
+            "Cancel Appointment?\n\n" +
+            `Original Amount: ₹${originalAmount.toFixed(2)}\n` +
+            `Time Remaining: ${hours.toFixed(2)} hours\n` +
+            `Cancellation Deduction: ${deduction}%\n` +
+            `Deduction Amount: ₹${deductionAmount.toFixed(2)}\n` +
+            `Refund Amount: ₹${refundAmount.toFixed(2)}\n\n` +
+            "Refund will be processed through Razorpay."
+        );
+
+
+        if (!confirmCancel) {
+            return;
+        }
+
+
+        // STEP 3: Actual cancellation + Razorpay refund
+        const response = await fetch(
+            "/api/appointments/refund",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify({
+                    appointment_id: appointmentId
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            alert(
+                data.message ||
+                "Unable to process refund."
+            );
+
+            return;
+        }
+
+
+        // STEP 4: Final refund details
+        alert(
+            "❌ Appointment Cancelled Successfully\n\n" +
+
+            `💳 Original Amount: ₹${Number(
+                data.original_amount || 0
+            ).toFixed(2)}\n` +
+
+            `📉 Cancellation Deduction: ${
+                data.deduction_percentage || 0
+            }%\n` +
+
+            `💰 Deduction Amount: ₹${Number(
+                data.deduction_amount || 0
+            ).toFixed(2)}\n\n` +
+
+            `👤 Client Refund: ₹${Number(
+                data.refund_amount || 0
+            ).toFixed(2)}\n` +
+
+            `🏥 Clinic Retained: ₹${Number(
+                data.clinic_retained_amount || 0
+            ).toFixed(2)}\n\n` +
+
+            `💳 Razorpay Refund ID: ${
+                data.razorpay_refund_id || "Processed"
+            }\n` +
+
+            `📌 Payment Status: ${
+                data.payment_status || "refunded"
+            }\n` +
+
+            `📌 Appointment Status: ${
+                data.appointment_status || "cancelled"
+            }`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Cancellation/refund error:",
+            error
+        );
+
+        alert(
+            "Cancellation/refund failed."
+        );
+    }
+}
+async function checkAppointmentQueue(appointmentId) {
+
+    const response = await fetch(
+        `/api/appointments/queue?appointment_id=${appointmentId}`,
+        {
+            method: "GET"
+        }
+    );
+
+    const data = await response.json();
+
+    if (!data.success) {
+
+        alert(
+            data.message ||
+            "Unable to fetch queue status."
+        );
+
+        return;
+    }
+
+    alert(
+        `🎫 Your Token: ${data.your_token}\n` +
+        `👥 Patients Ahead: ${data.patients_ahead}\n` +
+        `🔔 Current Token: ${data.current_token}\n` +
+        `⏱️ Estimated Wait: ${data.estimated_wait_time} minutes\n` +
+        `📌 Status: ${data.status}`
+    );
+}
+
+/* =========================================================
+   INJURY SELECT
+========================================================= */
+
+injuryImage.addEventListener(
+    "change",
+    function () {
+
+        const files =
+            Array.from(
+                injuryImage.files
+            );
+
+
+        if (
+            files.length === 0
+        ) {
+            return;
+        }
+
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+
+        const maxSize =
+            10 * 1024 * 1024;
+
+
+        files.forEach(
+            function(file) {
+
+                if (
+                    !allowedTypes.includes(
+                        file.type
+                    )
+                ) {
+
+                    addMessage(
+                        `${file.name} is not a valid image. Please upload JPG, PNG or WEBP.`,
+                        "assistant"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    file.size > maxSize
+                ) {
+
+                    addMessage(
+                        `${file.name} is larger than 10 MB.`,
+                        "assistant"
+                    );
+
+                    return;
+
+                }
+
+
+                const exists =
+                    selectedInjuryFiles.some(
+                        function(existingFile) {
+
+                            return (
+                                existingFile.name ===
+                                file.name &&
+
+                                existingFile.size ===
+                                file.size
+                            );
+
+                        }
+                    );
+
+
+                if (!exists) {
+
+                    selectedInjuryFiles.push(
+                        file
+                    );
+
+                }
+
+            }
+        );
+
+
+        if (
+            selectedInjuryFiles.length > 10
+        ) {
+
+            selectedInjuryFiles =
+                selectedInjuryFiles.slice(
+                    0,
+                    10
+                );
+
+        }
+
+
+        renderInjuryPhotos();
+
+        injuryImage.value =
+            "";
+
+    }
+);
+
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function renderInjuryPhotos() {
+
+    imagePreview.innerHTML =
+        "";
+
+
+    if (
+        selectedInjuryFiles.length === 0
+    ) {
+
+        selectedFile.textContent =
+            "";
+
+        return;
+
+    }
+
+
+    selectedFile.textContent =
+        `${selectedInjuryFiles.length} photo(s) selected`;
+
+
+    selectedInjuryFiles.forEach(
+        function(
+            file,
+            index
+        ) {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "clinic-photo-card";
+
+
+            const image =
+                document.createElement("img");
+
+            image.alt =
+                `Injury photo ${index + 1}`;
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    image.src =
+                        event.target.result;
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+
+            const removeButton =
+                document.createElement("button");
+
+
+            removeButton.type =
+                "button";
+
+
+            removeButton.className =
+                "clinic-remove-photo";
+
+
+            removeButton.textContent =
+                "×";
+
+
+            removeButton.addEventListener(
+                "click",
+                function() {
+
+                    selectedInjuryFiles.splice(
+                        index,
+                        1
+                    );
+
+                    renderInjuryPhotos();
+
+                }
+            );
+
+
+            const photoNumber =
+                document.createElement("span");
+
+
+            photoNumber.className =
+                "clinic-photo-number";
+
+
+            photoNumber.textContent =
+                `Photo ${index + 1}`;
+
+
+            card.appendChild(
+                image
+            );
+
+            card.appendChild(
+                removeButton
+            );
+
+            card.appendChild(
+                photoNumber
+            );
+
+
+            imagePreview.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    const analyzeButton =
+        document.createElement("button");
+
+
+    analyzeButton.type =
+        "button";
+
+
+    analyzeButton.className =
+        "clinic-analyze-button";
+
+
+    analyzeButton.textContent =
+        "Analyze Injury Photos";
+
+
+    analyzeButton.addEventListener(
+        "click",
+        uploadSelectedInjuryPhotos
+    );
+
+
+    imagePreview.appendChild(
+        analyzeButton
+    );
+
+}
+
+
+
+/* =========================================================
+   INJURY UPLOAD
+========================================================= */
+
+async function uploadSelectedInjuryPhotos() {
+
+    if (
+        injuryUploadInProgress
+    ) {
+        return;
+    }
+
+
+    if (
+        selectedInjuryFiles.length === 0
+    ) {
+
+        addMessage(
+            "Please select at least one injury photo first.",
+            "assistant"
+        );
+
+        return;
+
+    }
+
+
+    injuryUploadInProgress =
+        true;
+
+
+    chatStatus.textContent =
+        "Vision AI is analyzing your injury photos...";
+
+
+    try {
+
+        const formData =
+            new FormData();
+
+
+        selectedInjuryFiles.forEach(
+            function(file) {
+
+                formData.append(
+                    "files",
+                    file
+                );
+
+            }
+        );
+
+
+        const response =
+
+            await fetch(
+                "/api/injury/upload",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            addMessage(
+                data.message ||
+                "Unable to analyze injury photos.",
+                "assistant"
+            );
+
+            return;
+
+        }
+
+
+        showMultipleVisionResult(
+            data
+        );
+
+
+        selectedInjuryFiles =
+            [];
+
+        imagePreview.innerHTML =
+            "";
+
+        selectedFile.textContent =
+            "";
+
+        injuryImage.value =
+            "";
+
+
+        if (
+            data.suggested_specialty
+        ) {
+
+            addMessage(
+                `Based on the visible characteristics, a ${data.suggested_specialty} may be appropriate.`,
+                "assistant"
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Injury upload error:",
+            error
+        );
+
+        addMessage(
+            "Something went wrong while analyzing the injury photos.",
+            "assistant"
+        );
+
+    }
+
+    finally {
+
+        injuryUploadInProgress =
+            false;
+
+        chatStatus.textContent =
+            "";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   VISION RESULT
+========================================================= */
+
+function showMultipleVisionResult(
+    data
+) {
+
+    const messageDiv =
+        document.createElement("div");
+
+
+    messageDiv.className =
+        "clinic-message clinic-assistant-message";
+
+
+    const box =
+        document.createElement("div");
+
+
+    const title =
+        document.createElement("div");
+
+
+    title.className =
+        "clinic-vision-title";
+
+
+    title.textContent =
+        "📷 Injury Image Analysis";
+
+
+    box.appendChild(
+        title
+    );
+
+
+    if (
+        data.results &&
+        data.results.length
+    ) {
+
+        data.results.forEach(
+            function(
+                result,
+                index
+            ) {
+
+                const photoResult =
+                    document.createElement("div");
+
+
+                photoResult.className =
+                    "clinic-vision-photo-result";
+
+
+                const label =
+                    document.createElement("div");
+
+
+                label.className =
+                    "clinic-vision-label";
+
+
+                label.textContent =
+                    `Photo ${index + 1}`;
+
+
+                const analysis =
+                    document.createElement("div");
+
+
+                analysis.textContent =
+                    result.analysis ||
+                    "No analysis available.";
+
+
+                photoResult.appendChild(
+                    label
+                );
+
+
+                photoResult.appendChild(
+                    analysis
+                );
+
+
+                box.appendChild(
+                    photoResult
+                );
+
+            }
+        );
+
+    }
+
+
+    if (
+        data.care_advice
+    ) {
+
+        const advice =
+            document.createElement("div");
+
+
+        advice.className =
+            "clinic-care-advice";
+
+
+        advice.textContent =
+            `Care advice: ${data.care_advice}`;
+
+
+        box.appendChild(
+            advice
+        );
+
+    }
+
+
+    if (
+        data.suggested_specialty
+    ) {
+
+        const specialty =
+            document.createElement("div");
+
+
+        specialty.className =
+            "clinic-specialty";
+
+
+        specialty.textContent =
+            `Suggested specialty: ${data.suggested_specialty}`;
+
+
+        box.appendChild(
+            specialty
+        );
+
+    }
+
+
+    messageDiv.appendChild(
+        box
+    );
+
+
+    chatMessages.appendChild(
+        messageDiv
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+
+/* =========================================================
+   PRESCRIPTION FILE SELECT
+========================================================= */
+
+prescriptionFile.addEventListener(
+    "change",
+    async function () {
+
+        const file =
+            prescriptionFile.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+
+        const maxSize =
+            10 * 1024 * 1024;
+
+
+        if (
+            !allowedTypes.includes(
+                file.type
+            )
+        ) {
+
+            addMessage(
+                "Please upload a JPG, PNG or WEBP prescription image.",
+                "assistant"
+            );
+
+            prescriptionFile.value =
+                "";
+
+            return;
+
+        }
+
+
+        if (
+            file.size > maxSize
+        ) {
+
+            addMessage(
+                "Prescription file must be smaller than 10 MB.",
+                "assistant"
+            );
+
+            prescriptionFile.value =
+                "";
+
+            return;
+
+        }
+
+
+        await uploadPrescription(
+            file
+        );
+
+    }
+);
+
+
+
+/* =========================================================
+   PRESCRIPTION UPLOAD
+========================================================= */
+
+async function uploadPrescription(
+    file
+) {
+
+    prescriptionStatus.textContent =
+        "Uploading and analyzing prescription...";
+
+
+    chatStatus.textContent =
+        "Gemini is reading your prescription...";
+
+
+    try {
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "file",
+            file
+        );
+
+
+        const response =
+            await fetch(
+                "/api/prescription/upload",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        /* =================================================
+           ERROR
+        ================================================= */
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            addMessage(
+                data.message ||
+                "Unable to upload prescription.",
+                "assistant"
+            );
+
+            prescriptionStatus.textContent =
+                "";
+
+            return;
+
+        }
+
+
+        /* =================================================
+           GET GEMINI DETAILS
+        ================================================= */
+
+        const details =
+            data.prescription_details || {};
+
+
+        /* =================================================
+           SHOW PRESCRIPTION DETAILS
+        ================================================= */
+
+        addPrescriptionMessage(
+            details,
+            data
+        );
+
+
+        /* =================================================
+           STATUS
+        ================================================= */
+
+        prescriptionStatus.textContent =
+            "Prescription analyzed and saved successfully ✓";
+
+
+        prescriptionFile.value =
+            "";
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Prescription upload error:",
+            error
+        );
+
+
+        addMessage(
+            "Something went wrong while analyzing the prescription.",
+            "assistant"
+        );
+
+
+        prescriptionStatus.textContent =
+            "";
+
+    }
+
+    finally {
+
+        chatStatus.textContent =
+            "";
+
+    }
+
+}
+
+
+
+
+/* =========================================================
+   LOCATION-BASED DOCTOR FINDER
+   ADDED WITHOUT CHANGING EXISTING APPOINTMENT LOGIC
+========================================================= */
+
+const locationButtons =
+    document.querySelectorAll(
+        ".clinic-location-button"
+    );
+
+const clinicLocationStatus =
+    document.getElementById(
+        "clinicLocationStatus"
+    );
+
+const clinicSpecialistArea =
+    document.getElementById(
+        "clinicSpecialistArea"
+    );
+
+const clinicSpecialistButtons =
+    document.getElementById(
+        "clinicSpecialistButtons"
+    );
+
+let selectedClinicLocation = "";
+
+let locationDoctors = [];
+
+
+locationButtons.forEach(
+    function(button) {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                const location =
+                    button.dataset.location;
+
+                loadDoctorsByLocation(
+                    location
+                );
+
+            }
+        );
+
+    }
+);
+
+
+async function loadDoctorsByLocation(
+    location
+) {
+
+    selectedClinicLocation =
+        location;
+
+    locationDoctors = [];
+
+    clinicSpecialistArea.style.display =
+        "none";
+
+    clinicSpecialistButtons.innerHTML =
+        "";
+
+    locationButtons.forEach(
+        function(button) {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.location === location
+            );
+
+        }
+    );
+
+    clinicLocationStatus.textContent =
+        `Loading doctors in ${location}...`;
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/available-doctors?location=${encodeURIComponent(location)}`
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            clinicLocationStatus.textContent =
+                data.message ||
+                `Unable to load doctors for ${location}.`;
+
+            return;
+        }
+
+
+        locationDoctors =
+            Array.isArray(data.doctors)
+                ? data.doctors
+                : [];
+
+
+        if (
+            locationDoctors.length === 0
+        ) {
+
+            clinicLocationStatus.textContent =
+                `No available doctors found in ${location}.`;
+
+            return;
+        }
+
+
+        clinicLocationStatus.textContent =
+            `${locationDoctors.length} doctors available in ${location}. Select a specialist:`;
+
+
+        const specialists = {};
+
+        locationDoctors.forEach(
+            function(doctor) {
+
+                const specialization =
+                    doctor.specialization ||
+                    "Other";
+
+                if (
+                    !specialists[specialization]
+                ) {
+
+                    specialists[specialization] =
+                        [];
+
+                }
+
+                specialists[specialization].push(
+                    doctor
+                );
+
+            }
+        );
+
+
+        clinicSpecialistButtons.innerHTML =
+            "";
+
+
+        Object.keys(specialists)
+            .sort()
+            .forEach(
+                function(specialization) {
+
+                    const button =
+                        document.createElement(
+                            "button"
+                        );
+
+                    button.type =
+                        "button";
+
+                    button.className =
+                        "clinic-specialist-button";
+
+                    button.textContent =
+                        `${specialization} (${specialists[specialization].length})`;
+
+                    button.addEventListener(
+                        "click",
+                        function() {
+
+                            clinicSpecialistButtons
+                                .querySelectorAll(
+                                    ".clinic-specialist-button"
+                                )
+                                .forEach(
+                                    function(item) {
+                                        item.classList.remove(
+                                            "active"
+                                        );
+                                    }
+                                );
+
+                            button.classList.add(
+                                "active"
+                            );
+
+
+                            displayLocationDoctors(
+                                specialists[
+                                    specialization
+                                ],
+                                specialization,
+                                selectedClinicLocation
+                            );
+
+                        }
+                    );
+
+
+                    clinicSpecialistButtons.appendChild(
+                        button
+                    );
+
+                }
+            );
+
+
+        clinicSpecialistArea.style.display =
+            "block";
+
+
+    } catch (error) {
+
+        console.error(
+            "Location doctor search error:",
+            error
+        );
+
+        clinicLocationStatus.textContent =
+            "Unable to load doctors right now. Please try again.";
+
+    }
+
+}
+
+
+function displayLocationDoctors(
+    doctors,
+    specialization,
+    location
+) {
+
+    const messageDiv =
+        document.createElement(
+            "div"
+        );
+
+
+    messageDiv.className =
+        "clinic-message clinic-assistant-message";
+
+
+    const title =
+        document.createElement(
+            "strong"
+        );
+
+
+    title.textContent =
+        `${specialization} doctors in ${location}:`;
+
+
+    messageDiv.appendChild(
+        title
+    );
+
+
+    const doctorList =
+        document.createElement(
+            "div"
+        );
+
+
+    doctorList.className =
+        "clinic-doctor-list";
+
+
+    doctors.forEach(
+        function(doctor) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "clinic-doctor-card";
+
+
+            const name =
+                document.createElement(
+                    "h4"
+                );
+
+
+            name.textContent =
+                doctor.name;
+
+
+            const specialty =
+                document.createElement(
+                    "p"
+                );
+
+
+            specialty.textContent =
+                doctor.specialization;
+
+
+            const locationText =
+                document.createElement(
+                    "p"
+                );
+
+
+            locationText.textContent =
+                `📍 ${doctor.location || location}`;
+
+
+            const experience =
+                document.createElement(
+                    "p"
+                );
+
+
+            experience.textContent =
+                `Experience: ${doctor.experience_years || 0} years`;
+
+
+            const fee =
+                document.createElement(
+                    "p"
+                );
+
+
+            fee.textContent =
+                `Consultation Fee: ₹${Number(
+                    doctor.consultation_fee || 0
+                ).toFixed(2)}`;
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+            button.className =
+                "clinic-slot-button";
+
+            button.textContent =
+                "View Available Slots";
+
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    showDoctorSlots(
+                        doctor.id
+                    );
+
+                }
+            );
+
+
+            card.appendChild(
+                name
+            );
+
+            card.appendChild(
+                specialty
+            );
+
+            card.appendChild(
+                locationText
+            );
+
+            card.appendChild(
+                experience
+            );
+
+            card.appendChild(
+                fee
+            );
+
+            card.appendChild(
+                button
+            );
+
+
+            doctorList.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    messageDiv.appendChild(
+        doctorList
+    );
+
+
+    chatMessages.appendChild(
+        messageDiv
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+/* =========================================================
+   DOCTORS
+========================================================= */
+
+function displayDoctors(
+    doctors,
+    specialization
+) {
+
+    const messageDiv =
+        document.createElement("div");
+
+
+    messageDiv.className =
+        "clinic-message clinic-assistant-message";
+
+
+    const title =
+        document.createElement("strong");
+
+
+    title.textContent =
+        `I found these available ${specialization} doctors:`;
+
+
+    messageDiv.appendChild(
+        title
+    );
+
+
+    const doctorList =
+        document.createElement("div");
+
+
+    doctorList.className =
+        "clinic-doctor-list";
+
+
+    doctors.forEach(
+        function(doctor) {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "clinic-doctor-card";
+
+
+            const name =
+                document.createElement("h4");
+
+
+            name.textContent =
+                doctor.name;
+
+
+            const specialty =
+                document.createElement("p");
+
+
+            specialty.textContent =
+                doctor.specialization;
+
+
+            const experience =
+                document.createElement("p");
+
+
+            experience.textContent =
+                `Experience: ${doctor.experience_years} years`;
+
+
+            const button =
+                document.createElement("button");
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "clinic-slot-button";
+
+
+            button.textContent =
+                "View Available Slots";
+
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    showDoctorSlots(
+                        doctor.id
+                    );
+
+                }
+            );
+
+
+            card.appendChild(
+                name
+            );
+
+            card.appendChild(
+                specialty
+            );
+
+            card.appendChild(
+                experience
+            );
+
+            card.appendChild(
+                button
+            );
+
+
+            doctorList.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    messageDiv.appendChild(
+        doctorList
+    );
+
+
+    chatMessages.appendChild(
+        messageDiv
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+
+/* =========================================================
+   SLOTS
+========================================================= */
+
+async function showDoctorSlots(
+    doctorId
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/slots?doctor_id=${doctorId}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !data.success ||
+            !data.slots ||
+            data.slots.length === 0
+        ) {
+
+            addMessage(
+                "No available slots were found for this doctor.",
+                "assistant"
+            );
+
+            return;
+
+        }
+
+
+        const groupedSlots =
+            {};
+
+
+        data.slots.forEach(
+            function(slot) {
+
+                if (
+                    !groupedSlots[slot.date]
+                ) {
+
+                    groupedSlots[slot.date] =
+                        [];
+
+                }
+
+
+                groupedSlots[
+                    slot.date
+                ].push(
+                    slot
+                );
+
+            }
+        );
+
+
+        const messageDiv =
+            document.createElement("div");
+
+
+        messageDiv.className =
+            "clinic-message clinic-assistant-message";
+
+
+        const title =
+            document.createElement("strong");
+
+
+        title.textContent =
+            "Please select an available date:";
+
+
+        messageDiv.appendChild(
+            title
+        );
+
+
+        const dateList =
+            document.createElement("div");
+
+
+        dateList.className =
+            "clinic-date-list";
+
+
+        Object.keys(
+            groupedSlots
+        ).forEach(
+            function(date) {
+
+                const button =
+                    document.createElement("button");
+
+
+                button.type =
+                    "button";
+
+
+                button.className =
+                    "clinic-date-button";
+
+
+                button.textContent =
+                    formatDate(date);
+
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        showTimeSlots(
+                            date,
+                            groupedSlots[date],
+                            doctorId
+                        );
+
+                    }
+                );
+
+
+                dateList.appendChild(
+                    button
+                );
+
+            }
+        );
+
+
+        messageDiv.appendChild(
+            dateList
+        );
+
+
+        chatMessages.appendChild(
+            messageDiv
+        );
+
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Slot error:",
+            error
+        );
+
+
+        addMessage(
+            "Unable to load doctor slots.",
+            "assistant"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   TIME SLOTS
+========================================================= */
+
+function showTimeSlots(
+    selectedDate,
+    slots,
+    doctorId
+) {
+
+    const messageDiv =
+        document.createElement("div");
+
+
+    messageDiv.className =
+        "clinic-message clinic-assistant-message";
+
+
+    const title =
+        document.createElement("strong");
+
+
+    title.textContent =
+        `Available times for ${formatDate(selectedDate)}:`;
+
+
+    messageDiv.appendChild(
+        title
+    );
+
+
+    const timeList =
+        document.createElement("div");
+
+
+    timeList.className =
+        "clinic-date-list";
+
+
+    slots.forEach(
+        function(slot) {
+
+            const button =
+                document.createElement("button");
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "clinic-time-button";
+
+
+            button.textContent =
+                formatTime(
+                    slot.time
+                );
+
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    showBookingReason(
+                        doctorId,
+                        slot.id,
+                        selectedDate,
+                        slot.time
+                    );
+
+                }
+            );
+
+
+            timeList.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    messageDiv.appendChild(
+        timeList
+    );
+
+
+    chatMessages.appendChild(
+        messageDiv
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDate(
+    dateString
+) {
+
+    const date =
+        new Date(
+            dateString + "T00:00:00"
+        );
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   TIME FORMAT
+========================================================= */
+
+function formatTime(
+    timeString
+) {
+
+    const parts =
+        timeString.split(":");
+
+
+    let hour =
+        parseInt(
+            parts[0]
+        );
+
+
+    const minute =
+        parts[1];
+
+
+    const suffix =
+        hour >= 12
+            ? "PM"
+            : "AM";
+
+
+    hour =
+        hour % 12;
+
+
+    if (
+        hour === 0
+    ) {
+
+        hour = 12;
+
+    }
+
+
+    return `${hour}:${minute} ${suffix}`;
+
+}
+
+
+
+/* =========================================================
+   BOOKING REASON
+========================================================= */
+
+function showBookingReason(
+    doctorId,
+    slotId,
+    selectedDate,
+    selectedTime
+) {
+
+    const messageDiv =
+        document.createElement("div");
+
+
+    messageDiv.className =
+        "clinic-message clinic-assistant-message";
+
+
+    const bookingBox =
+        document.createElement("div");
+
+
+    bookingBox.className =
+        "clinic-booking-box";
+
+
+    const title =
+        document.createElement("strong");
+
+
+    title.textContent =
+        "Appointment Details";
+
+
+    const dateText =
+        document.createElement("p");
+
+
+    dateText.textContent =
+        `Date: ${formatDate(selectedDate)}`;
+
+
+    const timeText =
+        document.createElement("p");
+
+
+    timeText.textContent =
+        `Time: ${formatTime(selectedTime)}`;
+
+
+    const textarea =
+        document.createElement("textarea");
+
+
+    textarea.id =
+        "bookingReason";
+
+
+    textarea.className =
+        "clinic-booking-reason";
+
+
+    textarea.placeholder =
+        "Enter the reason for your appointment...";
+
+
+    const button =
+        document.createElement("button");
+
+
+    button.type =
+        "button";
+
+
+    button.className =
+        "clinic-confirm-button";
+
+
+    button.textContent =
+        "Confirm Appointment";
+
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            confirmAppointment(
+                doctorId,
+                slotId,
+                selectedDate,
+                selectedTime
+            );
+
+        }
+    );
+
+
+    bookingBox.appendChild(
+        title
+    );
+
+    bookingBox.appendChild(
+        dateText
+    );
+
+    bookingBox.appendChild(
+        timeText
+    );
+
+    bookingBox.appendChild(
+        textarea
+    );
+
+    bookingBox.appendChild(
+        button
+    );
+
+
+    messageDiv.appendChild(
+        bookingBox
+    );
+
+
+    chatMessages.appendChild(
+        messageDiv
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+
+/* =========================================================
+   CONFIRM APPOINTMENT
+========================================================= */
+
+async function confirmAppointment(
+    doctorId,
+    slotId,
+    selectedDate,
+    selectedTime
+) {
+
+    const reasonElement =
+        document.getElementById(
+            "bookingReason"
+        );
+
+
+    const reason =
+        reasonElement
+            ? reasonElement.value.trim()
+            : "";
+
+
+    if (!reason) {
+
+        addMessage(
+            "Please enter the reason for your appointment.",
+            "assistant"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/appointments",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        doctor_id:
+                            doctorId,
+
+                        slot_id:
+                            slotId,
+
+                        reason:
+                            reason
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !data.success
+        ) {
+
+            addMessage(
+                data.message ||
+                "Unable to book the appointment.",
+                "assistant"
+            );
+
+            return;
+
+        }
+
+
+        addMessage(
+
+            `✅ Appointment Confirmed\n\n` +
+
+            `Appointment ID: ${data.appointment_id}\n` +
+
+            `Date: ${formatDate(selectedDate)}\n` +
+
+            `Time: ${formatTime(selectedTime)}\n` +
+
+            `Reason: ${reason}\n\n` +
+
+            `Your appointment has been successfully booked.`,
+
+            "assistant"
+
+        );
+
+
+        await showPaymentSection(
+            data.appointment_id,
+            selectedDate,
+            selectedTime,
+            reason
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Appointment error:",
+            error
+        );
+
+
+        addMessage(
+            "Something went wrong while booking the appointment.",
+            "assistant"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CREATE RAZORPAY ORDER
+========================================================= */
+
+async function showPaymentSection(
+    appointmentId,
+    selectedDate,
+    selectedTime,
+    reason
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/payment/create-order",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        appointment_id:
+                            appointmentId
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            addMessage(
+                data.message ||
+                "Unable to create payment order.",
+                "assistant"
+            );
+
+            return;
+
+        }
+
+
+        const paymentId =
+            data.payment_id;
+
+
+        const amount =
+            data.amount / 100;
+
+
+        const messageDiv =
+            document.createElement("div");
+
+
+        messageDiv.className =
+            "clinic-message clinic-assistant-message";
+
+
+        const paymentBox =
+            document.createElement("div");
+
+
+        paymentBox.className =
+            "clinic-payment-box";
+
+
+        const title =
+            document.createElement("h3");
+
+
+        title.textContent =
+            "💳 Consultation Payment";
+
+
+        const appointmentInfo =
+            document.createElement("p");
+
+
+        appointmentInfo.className =
+            "clinic-payment-info";
+
+
+        appointmentInfo.textContent =
+            `Appointment ID: ${appointmentId}`;
+
+
+        const dateInfo =
+            document.createElement("p");
+
+
+        dateInfo.className =
+            "clinic-payment-info";
+
+
+        dateInfo.textContent =
+            `Date: ${formatDate(selectedDate)}`;
+
+
+        const timeInfo =
+            document.createElement("p");
+
+
+        timeInfo.className =
+            "clinic-payment-info";
+
+
+        timeInfo.textContent =
+            `Time: ${formatTime(selectedTime)}`;
+
+
+        const fee =
+            document.createElement("div");
+
+
+        fee.className =
+            "clinic-payment-fee";
+
+
+        fee.textContent =
+            `₹${amount}`;
+
+
+        const paymentInfo =
+            document.createElement("p");
+
+
+        paymentInfo.className =
+            "clinic-payment-info";
+
+
+        paymentInfo.textContent =
+            "Secure test payment powered by Razorpay.";
+
+
+        const payButton =
+            document.createElement("button");
+
+
+        payButton.type =
+            "button";
+
+
+        payButton.className =
+            "clinic-pay-button";
+
+
+        payButton.textContent =
+            `Pay ₹${amount} with Razorpay`;
+
+
+        payButton.addEventListener(
+            "click",
+            function() {
+
+                openRazorpayCheckout(
+                    appointmentId,
+                    paymentId,
+                    data,
+                    selectedDate,
+                    selectedTime,
+                    reason,
+                    payButton,
+                    paymentBox
+                );
+
+            }
+        );
+
+
+        paymentBox.appendChild(
+            title
+        );
+
+        paymentBox.appendChild(
+            appointmentInfo
+        );
+
+        paymentBox.appendChild(
+            dateInfo
+        );
+
+        paymentBox.appendChild(
+            timeInfo
+        );
+
+        paymentBox.appendChild(
+            fee
+        );
+
+        paymentBox.appendChild(
+            paymentInfo
+        );
+
+        paymentBox.appendChild(
+            payButton
+        );
+
+
+        messageDiv.appendChild(
+            paymentBox
+        );
+
+
+        chatMessages.appendChild(
+            messageDiv
+        );
+
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Payment section error:",
+            error
+        );
+
+
+        addMessage(
+            "Unable to load payment section.",
+            "assistant"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   RAZORPAY CHECKOUT
+========================================================= */
+
+function openRazorpayCheckout(
+    appointmentId,
+    paymentId,
+    orderData,
+    selectedDate,
+    selectedTime,
+    reason,
+    payButton,
+    paymentBox
+) {
+
+    try {
+
+        payButton.disabled =
+            true;
+
+
+        payButton.textContent =
+            "Opening Razorpay...";
+
+
+        const options = {
+
+            key:
+                orderData.key_id,
+
+            amount:
+                orderData.amount,
+
+            currency:
+                orderData.currency || "INR",
+
+            name:
+                "Sanjeevani Clinic",
+
+            description:
+                "Medical Consultation",
+
+            order_id:
+                orderData.razorpay_order_id,
+
+
+            handler:
+                async function(response) {
+
+                    await verifyRazorpayPayment(
+                        appointmentId,
+                        paymentId,
+                        response,
+                        orderData.amount / 100,
+                        payButton,
+                        paymentBox
+                    );
+
+                },
+
+
+            theme: {
+                color:
+                    "#245c56"
+            },
+
+
+            modal: {
+
+                ondismiss:
+                    function() {
+
+                        payButton.disabled =
+                            false;
+
+                        payButton.textContent =
+                            `Pay ₹${orderData.amount / 100} with Razorpay`;
+
+                    }
+
+            }
+
+        };
+
+
+        const razorpay =
+            new Razorpay(
+                options
+            );
+
+
+        razorpay.on(
+            "payment.failed",
+            function(response) {
+
+                console.error(
+                    "Razorpay payment failed:",
+                    response.error
+                );
+
+
+                payButton.disabled =
+                    false;
+
+
+                payButton.textContent =
+                    `Pay ₹${orderData.amount / 100} with Razorpay`;
+
+
+                addMessage(
+                    "Payment failed. Please try again.",
+                    "assistant"
+                );
+
+            }
+        );
+
+
+        razorpay.open();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Razorpay error:",
+            error
+        );
+
+
+        payButton.disabled =
+            false;
+
+
+        payButton.textContent =
+            `Pay ₹${orderData.amount / 100} with Razorpay`;
+
+
+        addMessage(
+            "Unable to open Razorpay payment.",
+            "assistant"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   VERIFY PAYMENT
+========================================================= */
+
+async function verifyRazorpayPayment(
+    appointmentId,
+    paymentId,
+    razorpayResponse,
+    amount,
+    payButton,
+    paymentBox
+) {
+
+    try {
+
+        payButton.disabled =
+            true;
+
+
+        payButton.textContent =
+            "Verifying Payment...";
+
+
+        const response =
+            await fetch(
+                "/api/payment/verify",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        payment_id:
+                            paymentId,
+
+                        razorpay_order_id:
+                            razorpayResponse.razorpay_order_id,
+
+                        razorpay_payment_id:
+                            razorpayResponse.razorpay_payment_id,
+
+                        razorpay_signature:
+                            razorpayResponse.razorpay_signature
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Payment verification failed."
+            );
+
+        }
+
+
+        payButton.style.display =
+            "none";
+
+
+        const successBox =
+            document.createElement("div");
+
+
+        successBox.className =
+            "clinic-payment-success";
+
+
+        successBox.innerHTML =
+
+            `✅ <strong>Payment Successful</strong><br><br>` +
+
+            `Amount Paid: ₹${amount}<br>` +
+
+            `Razorpay Payment ID: ` +
+
+            `${razorpayResponse.razorpay_payment_id}<br>` +
+
+            `Appointment ID: ${appointmentId}`;
+
+
+        const receiptButton =
+            document.createElement("button");
+
+
+        receiptButton.type =
+            "button";
+
+
+        receiptButton.className =
+            "clinic-receipt-button";
+
+
+        receiptButton.textContent =
+            "🧾 Download Receipt";
+
+
+        receiptButton.addEventListener(
+            "click",
+            function() {
+
+                downloadReceipt(
+                    data.payment_id ||
+                    paymentId
+                );
+
+            }
+        );
+
+
+        successBox.appendChild(
+            document.createElement("br")
+        );
+
+
+        successBox.appendChild(
+            receiptButton
+        );
+
+
+        paymentBox.appendChild(
+            successBox
+        );
+
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Payment verification error:",
+            error
+        );
+
+
+        payButton.disabled =
+            false;
+
+
+        payButton.textContent =
+            `Pay ₹${amount} with Razorpay`;
+
+
+        addMessage(
+            error.message ||
+            "Payment verification failed.",
+            "assistant"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   RECEIPT
+========================================================= */
+
+function downloadReceipt(
+    paymentId
+) {
+
+    window.open(
+        `/api/payment/receipt/${paymentId}`,
+        "_blank"
+    );
+
+}
+async function cancelAppointment(appointmentId) {
+
+    const confirmCancel = confirm(
+        "Are you sure you want to cancel this appointment?"
+    );
+
+    if (!confirmCancel) {
+        return;
+    }
+
+    const response = await fetch(
+        `/api/appointments/cancel?appointment_id=${appointmentId}`,
+        {
+            method: "POST"
+        }
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+
+        alert(
+            "Appointment cancelled successfully."
+        );
+
+    } else {
+
+        alert(
+            data.message ||
+            "Unable to cancel appointment."
+        );
+    }
+}
+
+
+async function processRefund(appointmentId) {
+
+    const response = await fetch(
+        `/api/appointments/refund?appointment_id=${appointmentId}`,
+        {
+            method: "GET"
+        }
+    );
+
+    const refundData = await response.json();
+
+    if (!refundData.success) {
+
+        alert(
+            refundData.message ||
+            "Refund calculation failed."
+        );
+
+        return;
+    }
+
+
+    const confirmRefund = confirm(
+        `Original Amount: ₹${refundData.original_amount}\n` +
+        `Deduction: ${refundData.deduction_percentage}%\n` +
+        `Refund Amount: ₹${refundData.refund_amount}\n\n` +
+        `Do you want to process the refund?`
+    );
+
+
+    if (!confirmRefund) {
+        return;
+    }
+
+
+    const response2 = await fetch(
+        `/api/appointments/refund?appointment_id=${appointmentId}`,
+        {
+            method: "POST"
+        }
+    );
+
+
+    const result = await response2.json();
+
+
+    if (result.success) {
+
+        alert(
+            `Refund initiated successfully.\n` +
+            `Refund Amount: ₹${result.refund_amount}`
+        );
+
+    } else {
+
+        alert(
+            result.message ||
+            "Refund failed."
+        );
+    }
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+chatLoginForm.addEventListener(
+    "submit",
+    loginFromChatbot
+);
+
+
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+chatInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+if (adminDashboardButton) {
+
+    adminDashboardButton.addEventListener(
+        "click",
+        loadAdminDashboard
+    );
+
+}
+
+if (adminDashboardCloseButton) {
+
+    adminDashboardCloseButton.addEventListener(
+        "click",
+        closeAdminDashboard
+    );
+
+}
+
+/* =========================================================
+   START
+========================================================= */
+checkLoginStatus();
+
+
+
+
+/* =========================================================
+   HOMEPAGE THEME + FLOATING CHAT CONTROLS
+   Home screen only. Existing chatbot functions remain unchanged.
+========================================================= */
+const themeToggle = document.getElementById("themeToggle");
+const chatFloatButton = document.getElementById("chatFloatButton");
+const chatFloatLabel = document.querySelector(".chat-float-label");
+const clinicChatPopup = document.getElementById("clinicChatPopup");
+const chatCloseButton = document.getElementById("chatCloseButton");
+window.chatbotLoginRequired = true;
+
+function applySavedTheme() {
+    const savedTheme = localStorage.getItem("sanjeevani-theme");
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        if (themeToggle) themeToggle.textContent = "☀️";
+    }
+}
+
+applySavedTheme();
+
+if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+        document.body.classList.toggle("dark-mode");
+        const isDark = document.body.classList.contains("dark-mode");
+        localStorage.setItem("sanjeevani-theme", isDark ? "dark" : "light");
+        themeToggle.textContent = isDark ? "☀️" : "🌙";
+    });
+}
+
+function openSanjeevaniChat() {
+    if (!clinicChatPopup) return;
+    clinicChatPopup.classList.add("chat-popup");
+    clinicChatPopup.scrollTop = 0;
+    if (chatFloatButton) chatFloatButton.textContent = "×";
+    if (chatFloatLabel) chatFloatLabel.style.display = "none";
+}
+
+function closeSanjeevaniChat() {
+    if (!clinicChatPopup) return;
+    clinicChatPopup.classList.remove("chat-popup");
+    if (chatFloatButton) chatFloatButton.textContent = "💬";
+    if (chatFloatLabel) chatFloatLabel.style.display = "block";
+}
+
+if (chatFloatButton) {
+    chatFloatButton.addEventListener("click", function () {
+        if (window.chatbotLoginRequired) {
+            window.location.href = "/login";
+            return;
+        }
+        if (clinicChatPopup.classList.contains("chat-popup")) {
+            closeSanjeevaniChat();
+        } else {
+            openSanjeevaniChat();
+        }
+    });
+}
+
+if (chatCloseButton) {
+    chatCloseButton.addEventListener("click", closeSanjeevaniChat);
+}
+
+</script>
+
+
+</body>
+
+</html>

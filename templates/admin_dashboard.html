@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Super User Dashboard | Sanjeevani Clinic</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body{background:#f3f8f7;color:#173c3a;font-family:Arial,sans-serif;margin:0}
+    header{background:#fff;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 14px #153b3910}
+    main{max-width:1200px;margin:36px auto;padding:0 22px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:24px 0}
+    .card{background:white;border-radius:14px;padding:20px;box-shadow:0 5px 20px #153b3910}.count{font-size:30px;font-weight:700;color:#087e76}
+    h2{margin:30px 0 12px}table{width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden}th,td{text-align:left;padding:11px;border-bottom:1px solid #e7efed;font-size:14px}th{background:#eaf5f3}
+    .section{overflow:auto}.muted{color:#65817d}.error{color:#ad3636}
+    input,select,button{padding:10px 12px;border:1px solid #cadbd7;border-radius:8px;margin:5px 0}button{background:#087e76;color:#fff;border:0;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header><strong>＋ Sanjeevani Clinic · Super User</strong><a href="/logout">Sign out</a></header>
+  <main><h1>Clinic overview</h1><p class="muted">Patients, clinicians, appointments and MCP token usage.</p>
+    <div id="status" class="muted">Loading dashboard…</div><div id="content"></div>
+  </main>
+<script>
+const statusBox=document.getElementById('status'), content=document.getElementById('content');
+function table(title, rows){
+  const safeRows=Array.isArray(rows)?rows:[];
+  if(!safeRows.length)return `<section class="section"><h2>${title}</h2><p class="muted">No records yet.</p></section>`;
+  const cols=Object.keys(safeRows[0]);
+  return `<section class="section"><h2>${title}</h2><table><thead><tr>${cols.map(x=>`<th>${escapeHtml(x.replaceAll('_',' '))}</th>`).join('')}</tr></thead><tbody>${safeRows.map(row=>`<tr>${cols.map(col=>`<td>${escapeHtml(row[col])}</td>`).join('')}</tr>`).join('')}</tbody></table></section>`;
+}
+function escapeHtml(value){return String(value??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+fetch('/api/admin/dashboard').then(async r=>{if(!r.ok)throw new Error(r.status===403?'Access denied.':'Could not load dashboard.');return r.json();}).then(d=>{
+  statusBox.remove(); const cards=[['Patients',d.patients],['Doctors',d.doctors],['Appointments',d.appointments],['MCP users',d.token_usage]];
+  content.innerHTML=`<div class="cards">${cards.map(([label,rows])=>`<div class="card"><div class="muted">${label}</div><div class="count">${Array.isArray(rows)?rows.length:0}</div></div>`).join('')}</div>`+
+    `<section class="card"><h2>Doctor login accounts</h2><p class="muted">Create or reset a doctor's login. The selected doctor's email is their login ID. Password must be at least 10 characters.</p><form id="doctorAccountForm"><label for="doctorSelect">Doctor</label><br><select id="doctorSelect" required>${(d.doctors||[]).map(doc=>`<option value="${escapeHtml(doc.doctor_id)}">${escapeHtml(doc.name)} · ${escapeHtml(doc.email||'No email')}</option>`).join('')}</select><br><label for="doctorPassword">Set password</label><br><input id="doctorPassword" type="password" minlength="10" maxlength="128" autocomplete="new-password" required><br><button type="submit">Create / reset account</button><p id="doctorAccountStatus" aria-live="polite"></p></form></section>`+
+    table('Patients',d.patients)+table('Doctors',d.doctors)+table('Appointments',d.appointments)+table('MCP token usage',d.token_usage);
+  const doctorForm=document.getElementById('doctorAccountForm');
+  doctorForm.addEventListener('submit',async event=>{
+    event.preventDefault(); const result=document.getElementById('doctorAccountStatus'); result.textContent='Saving…';
+    try{const response=await fetch('/api/admin/doctor-accounts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({doctor_id:Number(document.getElementById('doctorSelect').value),password:document.getElementById('doctorPassword').value})});const body=await response.json();if(!response.ok)throw new Error(body.detail||'Could not save doctor account.');result.textContent=`${body.message} Account ID: ${body.account_id}`;doctorForm.reset();}
+    catch(error){result.className='error';result.textContent=error.message;}
+  });
+}).catch(e=>{statusBox.className='error';statusBox.textContent=e.message;});
+</script>
+</body></html>
