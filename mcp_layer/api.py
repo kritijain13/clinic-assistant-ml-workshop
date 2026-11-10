@@ -9,7 +9,13 @@ from mcp_layer.mcp_server.patient_service import get_all_patients
 from mcp_layer.mcp_server.doctor_service import get_all_doctors
 from mcp_layer.mcp_server.appointment_service import get_all_appointments
 from mcp_layer.token_management.token_usage_service import get_today_usage, get_all_users_usage
+from mcp_layer.database.initialize import initialize_token_usage_table
 app = FastAPI(title="Clinic MCP API")
+
+
+@app.on_event("startup")
+async def initialize_database():
+    initialize_token_usage_table()
 
 
 class ChatRequest(BaseModel):

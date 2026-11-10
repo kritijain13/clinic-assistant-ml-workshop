@@ -1,17 +1,12 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+"""Shared database bindings for MCP token usage.
 
-DATABASE_URL = "sqlite:///./mcp_usage.db"
+TokenUsage keeps its own declarative Base, while using the clinic application's
+TiDB engine and session factory.
+"""
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}
-)
-
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+from clinic_assistant.database.connection import SessionLocal, engine
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
+
+__all__ = ["engine", "SessionLocal", "Base"]
